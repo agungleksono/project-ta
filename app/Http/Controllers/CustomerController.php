@@ -129,9 +129,10 @@ class CustomerController extends Controller
         }
 
         // Save new image
-        $photo = $request->file('photo')->store('avatar/customer');
+        $photo = $request->file('photo')->store('avatar/customer', ['disk' => 'public']);
         // $path = FileFormatter::name($photo);
-        $path = asset('storage/' . $photo);
+        $path = asset('uploads/' . $photo);
+        // $path = asset('storage/' . $photo);
         DB::table('customers')
             ->where('user_id', Auth::id())
             ->update([
