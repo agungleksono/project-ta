@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TrainingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/trainings', [TrainingController::class, 'index']);
+Route::get('/login', [AuthController::class, 'login']);
+Route::get('/test', [AuthController::class, 'test']);
+Route::get('/dashboard', function() {
+    return view('dashboard.index');
+});
+Route::get('/admins', function() {
+    return view('dashboard.admins.index');
 });
