@@ -41,8 +41,8 @@ class CustomerController extends Controller
         //
     }
 
-    public function getDataProfile($id) {
-        $user = User::find($id);
+    public function getDataProfile() {
+        $user = User::find(Auth::id());
         if (!$user) return ResponseFormatter::error(null, 'User not found', 400);
 
         $userData = User::with(['customer'])
@@ -52,7 +52,7 @@ class CustomerController extends Controller
         if ($userData->isEmpty()) return ResponseFormatter::error(null, 'User not found', 400);
 
         $responseData = [
-            'id' => $id,
+            'id' => Auth::id(),
             'username' => Auth::user()->username,
             'email' => Auth::user()->email,
             'api_token' => Auth::user()->api_token,

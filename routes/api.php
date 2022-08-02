@@ -27,7 +27,7 @@ Route::prefix('v1')->group(function() {
     
     Route::middleware('auth:api')->group(function() {
         Route::post('/logout', [AuthController::class, 'logout']);
-        Route::get('/profile/{id}', [CustomerController::class, 'getDataProfile']);
+        Route::get('/profile', [CustomerController::class, 'getDataProfile']);
         Route::put('/profile/edit', [CustomerController::class, 'updateProfile']);
         Route::post('/profile/avatar/edit', [CustomerController::class, 'updateProfilePicture']);
 
