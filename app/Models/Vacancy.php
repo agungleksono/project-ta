@@ -10,4 +10,9 @@ class Vacancy extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function administrator()
+    {
+        return $this->belongsTo(Administrator::class, 'admin_id', 'id');
+    }
 }

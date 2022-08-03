@@ -20,6 +20,7 @@ class CreateVacanciesTable extends Migration
             $table->string('job_description')->nullable();
             $table->string('job_requirements')->nullable();
             $table->dateTime('deadline')->nullable();
+            $table->foreignId('admin_id')->constrained('administrators')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

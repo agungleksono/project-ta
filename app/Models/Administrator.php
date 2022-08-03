@@ -13,4 +13,9 @@ class Administrator extends Model
     {
         return $this->hasOne(User::class, 'user_id', 'id');
     }
+
+    public function vacancy()
+    {
+        return $this->hasMany(Vacancy::class, 'admin_id', 'id');
+    }
 }

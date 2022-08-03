@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\VacancyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,11 @@ Route::prefix('v1')->group(function() {
         Route::put('/trainings/{id}', [TrainingController::class, 'update']);
         Route::delete('/trainings/{id}', [TrainingController::class, 'destroy']);
         Route::get('/test', [AuthController::class, 'test']);
+
+        // Vacancy
+        Route::get('/vacancies', [VacancyController::class, 'index']);
+        Route::get('/vacancy/{id}', [VacancyController::class, 'show']);
+        Route::post('/vacancy', [VacancyController::class, 'store']);
     });
     Route::post('/trainings/register', [TrainingController::class, 'registerTraining']);
 });
