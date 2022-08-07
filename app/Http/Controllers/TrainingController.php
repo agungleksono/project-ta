@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+use function PHPUnit\Framework\isEmpty;
+
 class TrainingController extends Controller
 {
     public function index()
@@ -69,31 +71,26 @@ class TrainingController extends Controller
 
         ]);
 
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => null,
-        ]);
+        return ResponseFormatter::success(null, 'success');
     }
 
     public function show($id)
     {
-        $training = Training::find($id);
+        $training = Training::find($id);        
         if (!$training) {
             return ResponseFormatter::error(null, 'Data not found', 400);
-            // return response()->json([
-            //     'status' => 404,
-            //     'error' => 'Data not found',
-            //     'data' => null,
-            // ], 404);
         }
-
+        
+        // check is customer have been registered the training
+        $customer_id = Customer::where('user_id', Auth::id())->first()->id;
+        $isRegistered = TrainingRecord::where('training_id', $id)->where('customer_id', $customer_id)->first();
+        if (empty($isRegistered)) {
+            $training->status = 0;
+        } else {
+            $training->status = 1;
+        }
+        
         return ResponseFormatter::success($training, 'success');
-        // return response()->json([
-        //     'status' => 200,
-        //     'error' => null,
-        //     'data' => $training,
-        // ], 200);
     }
 
     public function edit($id)
