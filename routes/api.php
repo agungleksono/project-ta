@@ -34,10 +34,12 @@ Route::prefix('v1')->group(function() {
 
         // Trainings route
         Route::get('/trainings', [TrainingController::class, 'index']);
-        Route::get('/trainings/{id}', [TrainingController::class, 'show']);
-        Route::post('/trainings', [TrainingController::class, 'store']);
+        Route::get('/training/{id}', [TrainingController::class, 'show']);
+        Route::post('/training', [TrainingController::class, 'store']);
         Route::put('/trainings/{id}', [TrainingController::class, 'update']);
         Route::delete('/trainings/{id}', [TrainingController::class, 'destroy']);
+        Route::post('/training/register', [TrainingController::class, 'registerTraining']);
+        
         Route::get('/test', [AuthController::class, 'test']);
 
         // Vacancy
@@ -45,5 +47,4 @@ Route::prefix('v1')->group(function() {
         Route::get('/vacancy/{id}', [VacancyController::class, 'show']);
         Route::post('/vacancy', [VacancyController::class, 'store']);
     });
-    Route::post('/trainings/register', [TrainingController::class, 'registerTraining']);
 });

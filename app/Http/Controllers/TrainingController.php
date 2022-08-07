@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseFormatter;
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Training;
 use App\Models\TrainingRecord;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -14,19 +19,11 @@ class TrainingController extends Controller
     public function index()
     {
         $trainings = Training::all();
-        if(count($trainings) > 0) {
-            return response()->json([
-                'status' => 200,
-                'error' => null,
-                'data' => $trainings,
-            ], 200);
+        if(count($trainings) == 0) {
+            return ResponseFormatter::error(null, 'Data not found', 400);
         }
 
-        return response()->json([
-            'status' => 404,
-            'error' => 'Data not found',
-            'data' => null,
-        ], 404);
+        return ResponseFormatter::success($trainings, 'success');
     }
 
     public function create()
@@ -38,7 +35,7 @@ class TrainingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'training_name' => 'required|string',
-            'training_img' => '',
+            'training_img' => 'required|image',
             'training_desc' => 'required|string',
             'training_price' => 'required|numeric',
             'register_start' => 'required|date',
@@ -56,9 +53,12 @@ class TrainingController extends Controller
             ], 400);
         }
 
+        $training_img = $request->file('training_img')->store('training', ['disk' => 'public']);
+        $path = asset('uploads/' . $training_img);
+
         Training::create([
             'training_name' => $request->post('training_name'),
-            'training_img' => $request->post('training_img'),
+            'training_img' => $path,
             'training_desc' => $request->post('training_desc'),
             'training_price' => $request->post('training_price'),
             'register_start' => $request->post('register_start'),
@@ -80,18 +80,20 @@ class TrainingController extends Controller
     {
         $training = Training::find($id);
         if (!$training) {
-            return response()->json([
-                'status' => 404,
-                'error' => 'Data not found',
-                'data' => null,
-            ], 404);
+            return ResponseFormatter::error(null, 'Data not found', 400);
+            // return response()->json([
+            //     'status' => 404,
+            //     'error' => 'Data not found',
+            //     'data' => null,
+            // ], 404);
         }
 
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => $training,
-        ], 200);
+        return ResponseFormatter::success($training, 'success');
+        // return response()->json([
+        //     'status' => 200,
+        //     'error' => null,
+        //     'data' => $training,
+        // ], 200);
     }
 
     public function edit($id)
@@ -167,43 +169,47 @@ class TrainingController extends Controller
     public function registerTraining(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'scheme' => 'required|string',
+            'training_id' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'Invalid request',
-                'data' => $validator->errors()
-            ], 400);
+            return ResponseFormatter::error(null, $validator->errors()->first(), 400);
         }
 
-        TrainingRecord::create([
-            'scheme' => $request->post('scheme'),
-            'trainer_id' => $request->post('trainer_id'),
-            'customer_id' => $request->post('customer_id'),
-            'training_id' => $request->post('training_id'),
-        ]);
+        try {
+            $customer = Customer::where('user_id', Auth::id())->get();
+            $customer_id = $customer[0]->id;
+            $date = now()->format('Ymd');
+            $invoice_number = $date . Str::upper(Str::random(8));    
+            $training = Training::findOrFail($request->training_id);
+            $invoice_total = $training->training_price;
 
-        $date = now()->format('Ymd');
-        $invoice_number = $date . Str::upper(Str::random(8));
+            DB::transaction(function () use ($request, $invoice_number, $customer_id, $invoice_total) {
+                TrainingRecord::create([
+                    // 'scheme' => $request->post('scheme'),
+                    // 'trainer_id' => $request->post('trainer_id'),
+                    'customer_id' => $customer_id,
+                    'training_id' => $request->post('training_id'),
+                ]);
+                
+        
+                Invoice::create([
+                    'invoice_number' => $invoice_number,
+                    'invoice_total' => $invoice_total,
+                    'invoice_status' => 0,
+                    // 'invoice_payment_method'
+                    // 'invoice_payment_deadline' => now()->addDay(),
+                    'invoice_payment_date' => now(),
+                    'training_id' => $request->post('training_id'),
+                    'customer_id' => $customer_id,
+                ]);
+            });
+            return ResponseFormatter::success(null, 'Upload success');            
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, 'Register training failed', 400);
+        }
 
-        $invoice_total = Training::findOrFail($request->training_id)->training_price;
 
-        Invoice::create([
-            'invoice_number' => $invoice_number,
-            'invoice_total' => $invoice_total,
-            'invoice_status' => 1,
-            // 'invoice_payment_method'
-            'invoice_payment_deadline' => now()->addDay(),
-            'training_id' => $request->post('training_id'),
-            'customer_id' => $request->post('customer_id'),
-        ]);
 
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => null,
-        ], 200);
     }
 }
