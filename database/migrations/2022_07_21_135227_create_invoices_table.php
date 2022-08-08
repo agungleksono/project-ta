@@ -11,10 +11,9 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number');
-            $table->decimal('invoice_total', 9, 2);
+            $table->integer('invoice_total')->nullable();
             $table->string('invoice_proof')->nullable();
             $table->tinyInteger('invoice_status');
-            $table->dateTime('invoice_payment_deadline');
             $table->date('invoice_payment_date');
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('training_id')->constrained('trainings')->cascadeOnUpdate()->cascadeOnDelete();

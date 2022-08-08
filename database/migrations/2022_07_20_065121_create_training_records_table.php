@@ -15,10 +15,10 @@ class CreateTrainingRecordsTable extends Migration
     {
         Schema::create('training_records', function (Blueprint $table) {
             $table->id();
-            $table->enum('scheme', ['Operator', 'Pengawas', 'Ahli']);
-            $table->foreignId('trainer_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('training_id')->constrained('trainings')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('training_certificate')->nullable();
+            $table->string('competence_certificate')->nullable();
             $table->timestamps();
         });
     }

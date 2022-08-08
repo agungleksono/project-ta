@@ -16,13 +16,13 @@ class CreateTrainingsTable extends Migration
         Schema::create('trainings', function (Blueprint $table) {
             $table->id();
             $table->string('training_name');
-            $table->string('training_img');
-            $table->text('training_desc');
-            $table->decimal('training_price');
-            $table->date('register_start');
-            $table->date('register_end');
-            $table->date('training_start');
-            $table->date('training_end');
+            $table->string('training_img')->nullable();
+            $table->text('training_desc')->nullable();
+            $table->integer('training_price')->nullable();
+            $table->date('register_start')->nullable();
+            $table->date('register_end')->nullable();
+            $table->date('training_start')->nullable();
+            $table->date('training_end')->nullable();
             $table->foreignId('trainer_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
