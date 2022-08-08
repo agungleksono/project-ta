@@ -167,6 +167,7 @@ class TrainingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'training_id' => 'required',
+            'invoice_proof' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -180,8 +181,10 @@ class TrainingController extends Controller
             $invoice_number = $date . Str::upper(Str::random(8));    
             $training = Training::findOrFail($request->training_id);
             $invoice_total = $training->training_price;
+            $invoice_proof = $request->file('invoice_proof')->store('invoice', ['disk' => 'public']);
+            $path = asset('uploads/' . $invoice_proof);
 
-            DB::transaction(function () use ($request, $invoice_number, $customer_id, $invoice_total) {
+            DB::transaction(function () use ($request, $invoice_number, $customer_id, $invoice_total, $path) {
                 TrainingRecord::create([
                     // 'scheme' => $request->post('scheme'),
                     // 'trainer_id' => $request->post('trainer_id'),
@@ -193,6 +196,7 @@ class TrainingController extends Controller
                 Invoice::create([
                     'invoice_number' => $invoice_number,
                     'invoice_total' => $invoice_total,
+                    'invoice_proof' => $path,
                     'invoice_status' => 0,
                     // 'invoice_payment_method'
                     // 'invoice_payment_deadline' => now()->addDay(),
