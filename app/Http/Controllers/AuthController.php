@@ -49,7 +49,7 @@ class AuthController extends Controller
             return ResponseFormatter::success(null, 'Register success');
         
         } catch (\Throwable $th) {
-            return ResponseFormatter::error(null, 'Register failed', 400);
+            return ResponseFormatter::error(null, $th, 400);
         }
     }
 
