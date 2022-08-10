@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\TrainingRecordController;
 use App\Http\Controllers\VacancyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -46,5 +47,9 @@ Route::prefix('v1')->group(function() {
         Route::get('/vacancies', [VacancyController::class, 'index']);
         Route::get('/vacancy/{id}', [VacancyController::class, 'show']);
         Route::post('/vacancy', [VacancyController::class, 'store']);
+        
+        Route::get('/followup_trainings', [TrainingRecordController::class, 'getCustomerTrainingRecords']);
+        Route::get('/followup_training/{id}', [TrainingRecordController::class, 'showCustomerTrainingRecord']);
+        Route::post('/training/requirements', [TrainingRecordController::class, 'uploadTrainingRequirements']);
     });
 });
