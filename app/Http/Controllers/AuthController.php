@@ -101,14 +101,18 @@ class AuthController extends Controller
             'email' => 'required|email:dns',
             'phone' => 'required|string',
             'address' => 'required|string',
+            'cv' => 'required|file',
         ]);
 
         if ($validator->fails()) {
             return ResponseFormatter::error(null, $validator->errors()->first(), 400);
         }
 
+        $trainer_cv = $request->file('cv')->store('trainer/cv', ['disk' => 'public']);
+        $path = asset('uploads/' . $trainer_cv);
+
         try {
-            DB::transaction(function () use($request) {
+            DB::transaction(function () use($request, $path) {
                 $user = User::create([
                     'username' => $request->username,
                     'email' => $request->email,
@@ -120,6 +124,7 @@ class AuthController extends Controller
                     'name' => $request->name,
                     'address' => $request->address,
                     'phone' => $request->phone,
+                    'cv' => $path,
                     'user_id' => $user->id,
                 ]);
             });
@@ -127,7 +132,7 @@ class AuthController extends Controller
             return ResponseFormatter::success(null, 'Register success.');
         
         } catch (\Throwable $th) {
-            return ResponseFormatter::error(null, 'Register failed', 400);
+            return ResponseFormatter::error(null, $th, 400);
         }
     }
 
