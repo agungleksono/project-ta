@@ -14,6 +14,7 @@ class CreateTrainersTable extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('photo')->nullable();
+            $table->string('cv')->nullable();
             $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
