@@ -20,4 +20,14 @@ class Customer extends Model
     {
         return $this->hasOne(User::class, 'user_id', 'id');
     }
+
+    public function assignment()
+    {
+        return $this->hasMany(Assignment::class, 'customer_id', 'id');
+    }
+
+    public function customerDocument()
+    {
+        return $this->belongsTo(CustomerDocument::class, 'customer_id', 'id');
+    }
 }

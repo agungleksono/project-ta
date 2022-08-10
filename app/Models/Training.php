@@ -30,6 +30,7 @@ class Training extends Model
         return [
             'id' => $trainer->id,
             'name' => $trainer->name,
+            'cv' => $trainer->cv,
         ];
     }
 }
