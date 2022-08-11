@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -132,6 +133,7 @@ class AuthController extends Controller
             return ResponseFormatter::success(null, 'Register success.');
         
         } catch (\Throwable $th) {
+            Helper::deleteFileOnStorage($path);
             return ResponseFormatter::error(null, $th, 400);
         }
     }
