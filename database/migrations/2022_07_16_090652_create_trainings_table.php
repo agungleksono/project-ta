@@ -23,7 +23,7 @@ class CreateTrainingsTable extends Migration
             $table->date('register_end')->nullable();
             $table->date('training_start')->nullable();
             $table->date('training_end')->nullable();
-            $table->date('training_materials')->nullable();
+            $table->string('training_materials')->nullable();
             $table->string('whatsapp_group')->nullable();
             $table->foreignId('trainer_id')->constrained('trainers')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
