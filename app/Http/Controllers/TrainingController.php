@@ -56,17 +56,21 @@ class TrainingController extends Controller
         }
 
         $training_img = $request->file('training_img')->store('training', ['disk' => 'public']);
-        $path = asset('uploads/' . $training_img);
+        $trainingImgPath = asset('uploads/' . $training_img);
+        $training_materials = $request->file('training_materials')->store('materials', ['disk' => 'public']);
+        $trainingMaterialsPath = asset('uploads/' . $training_materials);
 
         Training::create([
             'training_name' => $request->post('training_name'),
-            'training_img' => $path,
+            'training_img' => $trainingImgPath,
             'training_desc' => $request->post('training_desc'),
             'training_price' => $request->post('training_price'),
             'register_start' => $request->post('register_start'),
             'register_end' => $request->post('register_end'),
             'training_start' => $request->post('training_start'),
             'training_end' => $request->post('training_end'),
+            'training_materials' => $trainingMaterialsPath,
+            'whatsapp_group' => $request->post('whatsapp_group'),
             'trainer_id' => $request->post('trainer_id'),
 
         ]);
