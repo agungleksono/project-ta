@@ -12,7 +12,7 @@ class Training extends Model
     protected $table = 'trainings';
     protected $guarded = ['id'];
     protected $appends = ['trainer'];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['register_start', 'register_end', 'created_at', 'updated_at'];
 
     public function trainer()
     {
