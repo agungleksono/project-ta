@@ -68,9 +68,9 @@ class TrainingRecordController extends Controller
         ];
 
         if ($trainingRecord->training->training_end < now()) {
-            $responseData += ['training_status' => 1];
+            $responseData += ['status' => 1];
         } else {
-            $responseData += ['training_status' => 0];
+            $responseData += ['status' => 0];
         }
         
         if (!$customerDocuments) {
