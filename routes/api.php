@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TrainingRecordController;
 use App\Http\Controllers\VacancyController;
@@ -43,15 +44,28 @@ Route::prefix('v1')->group(function() {
         Route::delete('/trainings/{id}', [TrainingController::class, 'destroy']);
         Route::post('/training/register', [TrainingController::class, 'registerTraining']);
         
-        Route::get('/test', [AuthController::class, 'test']);
+        
+        Route::get('/trainers', [TrainerController::class, 'index']);
+        Route::get('/trainer/{id}', [TrainerController::class, 'show']);
+        Route::post('/trainer/{id}', [TrainerController::class, 'update']);
+        Route::delete('/trainer/{id}', [TrainerController::class, 'destroy']);
 
         // Vacancy
         Route::get('/vacancies', [VacancyController::class, 'index']);
         Route::get('/vacancy/{id}', [VacancyController::class, 'show']);
         Route::post('/vacancy', [VacancyController::class, 'store']);
+        Route::put('/vacancy/{id}', [VacancyController::class, 'update']);
+        Route::delete('/vacancy/{id}', [VacancyController::class, 'destroy']);
         
         Route::get('/followup_trainings', [TrainingRecordController::class, 'getCustomerTrainingRecords']);
         Route::get('/followup_training/{id}', [TrainingRecordController::class, 'showCustomerTrainingRecord']);
         Route::post('/training/requirements', [TrainingRecordController::class, 'uploadTrainingRequirements']);
+
+        // Admin
+        Route::get('/customers', [CustomerController::class, 'index']);
+        Route::get('/customer/{id}', [CustomerController::class, 'show']);
+        Route::delete('/customer/{id}', [CustomerController::class, 'destroy']);
     });
+    Route::post('/logintest', [AuthController::class, 'loginTest']);
+    Route::get('/test', [AuthController::class, 'test']);
 });
