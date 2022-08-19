@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Helpers\ResponseFormatter;
 use App\Models\Trainer;
 use App\Models\User;
@@ -13,7 +14,33 @@ class TrainerController extends Controller
 {
     public function index()
     {
-        //
+        try {
+            $trainers = DB::table('users')
+                        ->join('trainers', 'users.id', '=', 'trainers.user_id')
+                        ->select('users.id', 'trainers.name', 'users.username', 'users.email', 'trainers.address', 'trainers.phone', 'trainers.photo', 'trainers.cv')
+                        ->where('users.status', 3)
+                        ->orderBy('users.created_at', 'desc')
+                        ->get();
+            // $trainers = User::with(['trainer'])->where('status', 3)->get();
+            return ResponseFormatter::success($trainers, 'success');            
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $customer = User::with(['trainer'])
+                        ->where('id', $id)
+                        ->where('status', 3)
+                        ->first();
+
+            if (!$customer) return ResponseFormatter::error(null, 'Data not found');
+            return ResponseFormatter::success($customer, 'success');
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
     }
 
     public function create()
@@ -74,48 +101,89 @@ class TrainerController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string',
+            // 'password' => 'required|confirmed|min:8',
+            'name' => 'required|string',
+            'email' => 'required|email:dns',
+            'phone' => 'required|string',
+            'address' => 'required|string',
+            'photo' => 'required|image',
+            'cv' => 'required|file',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseFormatter::error(null, $validator->errors()->first(), 400);
+        }
+
+        $trainer = Trainer::where('user_id', $id)->first();
+        if (!$trainer) return ResponseFormatter::error(null, 'Data not found', 400);
+
+        $cv = $request->file('cv')->store('trainer/cv', ['disk' => 'public']);
+        $cvPath = asset('uploads/' . $cv);
+
+        $photo = $request->file('photo')->store('avatar/trainer', ['disk' => 'public']);
+        $photoPath = asset('uploads/' . $photo);
+        try {
+
+            DB::transaction(function () use ($request, $id, $cvPath, $photoPath) {
+                DB::table('users')
+                    ->where('id', $id)
+                    ->update([
+                        'username' => $request->username,
+                        'email' => $request->email,
+                    ]);
+
+                DB::table('trainers')
+                    ->where('user_id', $id)
+                    ->update([
+                        'name' => $request->name,
+                        'address' => $request->address,
+                        'phone' => $request->phone,
+                        'photo' => $photoPath,
+                        'cv' => $cvPath,
+                    ]);
+            });
+    
+            // $trainer->username = $request->post('username', $trainer->username);
+            // $trainer->password = $request->post('password', $trainer->password);
+            // $trainer->name = $request->post('name', $trainer->name);
+            // $trainer->email = $request->post('email', $trainer->email);
+            // $trainer->phone = $request->post('phone', $trainer->phone);
+            // $trainer->address = $request->post('address', $trainer->address);
+            // $trainer->photo = $request->post('photo', $trainer->photo);
+            // $trainer->cv = $request->post('cv', $trainer->cv);
+            // $trainer->save();
+
+            if ($trainer->photo || $trainer->cv) {
+                Helper::deleteFileOnStorage([$trainer->photo, $trainer->cv]);
+            }
+            return ResponseFormatter::success(null, 'Success');            
+        } catch (\Throwable $th) {
+            Helper::deleteFileOnStorage([$cvPath, $photoPath]);
+            return ResponseFormatter::error(null, $th, 400);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $trainer = Trainer::where('user_id', $id)->first();
+            if (!$user) return ResponseFormatter::error(null, 'User not found', 400);
+            
+            DB::transaction(function () use ($id, $user, $trainer) {
+                $user->delete();
+                
+                Helper::deleteFileOnStorage([$trainer->photo, $trainer->cv]);
+                DB::table('trainers')->where('user_id', $id)->delete();
+            });
+
+            return ResponseFormatter::success(null, 'Data deleted');
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
     }
 }
