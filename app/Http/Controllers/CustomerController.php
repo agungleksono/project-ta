@@ -18,7 +18,28 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        //
+        try {
+            $customers = User::with(['customer'])->where('status', 2)->get();
+            return ResponseFormatter::success($customers, 'success');
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
+        
+    }
+    
+    public function show($id)
+    {
+        try {
+            $customer = User::with(['customer'])
+                        ->where('id', $id)
+                        ->where('status', 2)
+                        ->first();
+
+            if (!$customer) return ResponseFormatter::error(null, 'Data not found');
+            return ResponseFormatter::success($customer, 'success');
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
     }
 
     public function create()
@@ -31,10 +52,6 @@ class CustomerController extends Controller
         //
     }
 
-    public function show($id)
-    {
-        //
-    }
 
     public function edit($id)
     {
@@ -143,7 +160,23 @@ class CustomerController extends Controller
     }
 
     public function destroy($id)
-    {
-        //
+    {        
+        try {
+            $user = User::findOrFail($id);
+    
+            if (!$user) {
+                return ResponseFormatter::error(null, 'User not found', 400);
+            }
+
+            DB::transaction(function() use($id, $user) {
+                $user->delete();
+
+                DB::table('customers')->where('user_id', $id)->delete();
+            });
+
+            return ResponseFormatter::success(null, 'Data deleted');
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
     }
 }
