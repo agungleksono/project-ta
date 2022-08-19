@@ -80,3 +80,22 @@
     </div>
   </div>
 </div>
+
+<script src="/js/script.js" type = "text/javascript"></script>
+<script>
+	const token = getCookie('token');
+	// let x = document.cookie
+	console.log(token);
+
+	fetch(`{{ url('/api/v1/trainings') }}`, {
+	// fetch("https://sisurty.herokuapp.com/api/v1/trainings", {
+		method: 'GET',
+		headers: {
+			"Content-type": "application/json",
+			"Accept": "application/json",
+			"Authorization" : `Bearer ${token}`
+		}
+	})
+	.then(response => response.json())
+	.then(response => console.log(response.data))
+</script>

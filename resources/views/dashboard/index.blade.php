@@ -57,3 +57,26 @@
 </table>
 </div>
 @endsection
+<script src="/js/script.js" type = "text/javascript"></script>
+<script>
+	// function getCookie(name) {
+  //   function escape(s) { return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, '\\$1'); }
+  //   var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
+  //   return match ? match[1] : null;
+	// }
+	const token = getCookie('token');
+	// let x = document.cookie
+	console.log(token);
+
+	fetch(`{{ url('/api/v1/trainings') }}`, {
+	// fetch("https://sisurty.herokuapp.com/api/v1/trainings", {
+		method: 'GET',
+		headers: {
+			"Content-type": "application/json",
+			"Accept": "application/json",
+			"Authorization" : `Bearer ${token}`
+		}
+	})
+	.then(response => response.json())
+	.then(response => console.log(response.data))
+</script>
