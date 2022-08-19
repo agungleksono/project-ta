@@ -1,0 +1,17 @@
+body, html {
+	height: 100%;
+}
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+#card {
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.btn-login {
+	background-color: #F5941A !important;
+}
