@@ -17,7 +17,7 @@ class TrainerController extends Controller
         try {
             $trainers = DB::table('users')
                         ->join('trainers', 'users.id', '=', 'trainers.user_id')
-                        ->select('users.id', 'trainers.name', 'users.username', 'users.email', 'trainers.address', 'trainers.phone', 'trainers.photo', 'trainers.cv')
+                        ->select('users.id', 'trainers.name', 'users.username', 'users.email', 'trainers.address', 'trainers.phone', 'trainers.photo', 'trainers.cv', 'trainers.id as trainer_id')
                         ->where('users.status', 3)
                         ->orderBy('users.created_at', 'desc')
                         ->get();
