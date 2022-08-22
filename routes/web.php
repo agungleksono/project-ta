@@ -31,15 +31,28 @@ Route::get('/login', function() {
 Route::get('/admin', function() {
     return view('dashboard.admins.index');
 });
-Route::get('/admin/customers', function() {
-    return view('dashboard.admins.customer');
-})->name('customers');
-Route::get('/admin/lowongan-kerja', function() {
-    return view('dashboard.admins.vacancy');
-})->name('vacancies');
-Route::get('/admin/trainer', function() {
-    return view('dashboard.admins.trainer');
-})->name('trainers');
-Route::get('/admin/pelatihan', function() {
-    return view('dashboard.admins.training');
-})->name('trainings');
+
+
+Route::middleware('token')->group(function() {
+    Route::get('/admin/customers', function() {
+        return view('dashboard.admins.customer');
+    })->name('customers');
+    Route::get('/admin/lowongan-kerja', function() {
+        return view('dashboard.admins.vacancy');
+    })->name('vacancies');
+    Route::get('/admin/trainer', function() {
+        return view('dashboard.admins.trainer');
+    })->name('trainers');
+    Route::get('/admin/pelatihan', function() {
+        return view('dashboard.admins.training');
+    })->name('trainings');
+    Route::get('/admin/riwayat-pelatihan', function() {
+        return view('dashboard.admins.training_record');
+    })->name('training_records');
+    Route::get('/admin/profile', function() {
+        return view('dashboard.admins.profile');
+    })->name('admin_profile');
+    Route::get('/admin/transaksi', function() {
+        return view('dashboard.admins.invoice');
+    })->name('invoice');
+});

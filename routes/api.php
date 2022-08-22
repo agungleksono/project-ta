@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TrainingRecordController;
@@ -35,15 +37,23 @@ Route::prefix('v1')->group(function() {
         Route::get('/profile', [CustomerController::class, 'getDataProfile']);
         Route::put('/profile/edit', [CustomerController::class, 'updateProfile']);
         Route::post('/profile/avatar/edit', [CustomerController::class, 'updateProfilePicture']);
+        Route::get('/admin/profile', [AdminController::class, 'getAdminProfile']);
 
         // Trainings route
         Route::get('/trainings', [TrainingController::class, 'index']);
         Route::get('/training/{id}', [TrainingController::class, 'show']);
         Route::post('/training', [TrainingController::class, 'store']);
         Route::put('/trainings/{id}', [TrainingController::class, 'update']);
-        Route::delete('/trainings/{id}', [TrainingController::class, 'destroy']);
+        Route::delete('/training/{id}', [TrainingController::class, 'destroy']);
         Route::post('/training/register', [TrainingController::class, 'registerTraining']);
-        
+        Route::get('/admin/trainings', [TrainingController::class, 'getTrainings']);
+        Route::get('/admin/training/{id}', [TrainingController::class, 'getDetailTraining']);
+        Route::get('/admin/training_records', [TrainingController::class, 'getTrainingRecords']);
+
+        // Invoice
+        Route::get('/invoices', [InvoiceController::class, 'index']);
+        Route::get('/invoice/{id}', [InvoiceController::class, 'show']);
+        Route::delete('/invoice/{id}', [InvoiceController::class, 'destroy']);
         
         Route::get('/trainers', [TrainerController::class, 'index']);
         Route::get('/trainer/{id}', [TrainerController::class, 'show']);
@@ -68,4 +78,5 @@ Route::prefix('v1')->group(function() {
     });
     Route::post('/logintest', [AuthController::class, 'loginTest']);
     Route::get('/test', [AuthController::class, 'test']);
+    // Route::get('/admin/trainings', [TrainingController::class, 'getTrainings']);
 });
