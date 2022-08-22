@@ -140,7 +140,7 @@
 					<td>${vacancy.company_name}</td>
 					<td class="text-center">${vacancy.job_position}</td>
 					<td class="text-center">${dateFormatter(vacancy.deadline)}</td>
-					<td class="text-center">${dateFormatter(vacancy.deadline) >= dateFormatter(currentDate) ? '<span class="badge text-bg-success">Dibuka</span>' : '<span class="badge text-bg-danger">Ditutup</span>'}</td>
+					<td class="text-center">${dateFormatCompare(vacancy.deadline) >= dateFormatCompare(currentDate) ? '<span class="badge text-bg-success">Dibuka</span>' : '<span class="badge text-bg-danger">Ditutup</span>'}</td>
 					
 					<td class="td-last"><a class="btn btn-outline-primary btn-sm btn-detail" href="#" onclick="showDetailData(${vacancy.id})" role="button" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="bi bi-info-square"></i><span class="d-none d-lg-inline ms-1">Detail</span></a></td>
 					<td class="td-last"><a class="btn btn-outline-success btn-sm" href="#" onclick="showEditData(${vacancy.id})" role="button" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i><span class="d-none d-lg-inline ms-1">Ubah</span></a></td>
