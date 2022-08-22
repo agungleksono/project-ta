@@ -14,6 +14,11 @@ class Invoice extends Model
 
     public function training()
     {
-        // return $this->;
+        return $this->belongsTo(Training::class, 'training_id', 'id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 }

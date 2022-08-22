@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\ResponseFormatter;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
@@ -161,6 +163,8 @@ class AuthController extends Controller
         $id = Auth::user()->id;
         $user = User::findOrFail($id);
         $user->update(['api_token' => $token]);
+
+        // $cookie = Cookie::queue('cookie', $token, 3);
         
         // Get user data relation
         $userData = User::with(['administrator', 'customer', 'trainer'])->where('id', '=', $id)->get();
@@ -170,6 +174,7 @@ class AuthController extends Controller
             'email' => Auth::user()->email,
             'user_role' => Auth::user()->status,
             'api_token' => $token,
+            // 'cookie' => $cookie
         ];
 
         if (Auth::user()->status == 1) {
@@ -198,10 +203,35 @@ class AuthController extends Controller
         return ResponseFormatter::success(null, 'Logout success');
     }
 
-    public function test() {
-        // $date = now()->addDay();
-        // return $date;
-        return request()->getHttpHost();
+    public function loginTest(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+ 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+ 
+            return redirect()->intended('dashboard');
+        }
+ 
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
+
+    public function test(Request $request) {
+        $x = Cookie::get('token');
+        return now()->format('ymd');
+        // return $_COOKIE["token"];
+        // if (Cookie::has('token')) {
+        //     return 'token';
+        // } else {
+        //     return 'no';
+        // }
+        // return Auth::user();
+        // return request()->getHttpHost();
         // $userData = User::with(['customer', 'trainer'])->where('id', '=', 3)->get();
         // return response()->json($userData[0]->trainer);
     }

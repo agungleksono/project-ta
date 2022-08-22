@@ -29,9 +29,24 @@ class TrainingController extends Controller
         return ResponseFormatter::success($trainings, 'success');
     }
 
-    public function create()
+    public function getTrainings()
     {
-        
+        $trainings = Training::with(['trainer'])->where('training_end', '>=', now()->format('Y-m-d'))->orderBy('created_at', 'DESC')->get();
+        return ResponseFormatter::success($trainings, 'success');
+    }
+
+    public function getTrainingRecords()
+    {
+        $trainings = Training::with(['trainer'])->where('training_end', '<', now()->format('Y-m-d'))->orderBy('created_at', 'DESC')->get();
+        return ResponseFormatter::success($trainings, 'success');
+    }
+
+    public function getDetailTraining($id)
+    {
+        $training = Training::find($id);
+        $trainingRecords = TrainingRecord::where('training_id', $id)->count();
+        $training->total_participants = $trainingRecords;
+        return ResponseFormatter::success($training, 'success');
     }
 
     public function store(Request $request)
@@ -56,8 +71,8 @@ class TrainingController extends Controller
 
         $training_img = $request->file('training_img')->store('training', ['disk' => 'public']);
         $trainingImgPath = asset('uploads/' . $training_img);
-        $training_materials = $request->file('training_materials')->store('materials', ['disk' => 'public']);
-        $trainingMaterialsPath = asset('uploads/' . $training_materials);
+        // $training_materials = $request->file('training_materials')->store('materials', ['disk' => 'public']);
+        // $trainingMaterialsPath = asset('uploads/' . $training_materials);
 
         try {
             Training::create([
@@ -67,7 +82,7 @@ class TrainingController extends Controller
                 'training_price' => $request->post('training_price'),
                 'training_start' => $request->post('training_start'),
                 'training_end' => $request->post('training_end'),
-                'training_materials' => $trainingMaterialsPath,
+                // 'training_materials' => $trainingMaterialsPath,
                 'whatsapp_group' => $request->post('whatsapp_group'),
                 'trainer_id' => $request->post('trainer_id'),
     
@@ -75,7 +90,7 @@ class TrainingController extends Controller
     
             return ResponseFormatter::success(null, 'success');
         } catch (\Throwable $th) {
-            Helper::deleteFileOnStorage([$trainingImgPath, $trainingMaterialsPath]);
+            Helper::deleteFileOnStorage($trainingImgPath);
             return ResponseFormatter::error(null, $th, 400);
         }
     }
@@ -91,9 +106,9 @@ class TrainingController extends Controller
         $customer_id = Customer::where('user_id', Auth::id())->first()->id;
         $isRegistered = TrainingRecord::where('training_id', $id)->where('customer_id', $customer_id)->first();
         if (empty($isRegistered)) {
-            $training->status = 0;
+            $training->status = 'Sudah Mendaftar';
         } else {
-            $training->status = 1;
+            $training->status = 'Belum Mendaftar';
         }
         
         return ResponseFormatter::success($training, 'success');
@@ -108,7 +123,7 @@ class TrainingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'training_name' => 'required|string',
-            'training_img' => '',
+            'training_img' => 'image',
             'training_desc' => 'required|string',
             'training_price' => 'required|numeric',
             'register_start' => 'required|date',

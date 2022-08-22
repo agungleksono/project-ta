@@ -24,6 +24,11 @@ class Training extends Model
         return $this->hasMany(TrainingRecord::class, 'training_id', 'id');
     }
 
+    public function invoice()
+    {
+        return $this->hasMany(Invoice::class, 'training_id', 'id');
+    }
+
     public function getTrainerAttribute()
     {
         $trainer = $this->belongsTo(Trainer::class, 'trainer_id', 'id')->getResults();

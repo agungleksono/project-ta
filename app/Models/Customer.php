@@ -31,4 +31,9 @@ class Customer extends Model
     {
         return $this->belongsTo(CustomerDocument::class, 'customer_id', 'id');
     }
+
+    public function invoice()
+    {
+        return $this->hasMany(Invoice::class, 'customer_id', 'id');
+    }
 }
