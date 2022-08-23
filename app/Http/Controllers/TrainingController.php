@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Helpers\ResponseFormatter;
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\Trainer;
 use App\Models\Training;
 use App\Models\TrainingRecord;
 use Facade\FlareClient\Http\Response;
@@ -46,7 +47,20 @@ class TrainingController extends Controller
         $training = Training::find($id);
         $trainingRecords = TrainingRecord::where('training_id', $id)->count();
         $training->total_participants = $trainingRecords;
+        if ($training->training_img) {
+            $training->training_img = url('storage/' . $training->training_img);
+        } else {
+            $training->training_img = null;
+        }
+        
         return ResponseFormatter::success($training, 'success');
+    }
+
+    public function getTrainingForTrainer()
+    {
+        $trainer = DB::table('trainers')->where('user_id', Auth::id())->first();
+        $trainings = Training::where('trainer_id', $trainer->id)->orderBy('created_at', 'DESC')->get();
+        return ResponseFormatter::success($trainings, 'success');
     }
 
     public function store(Request $request)
@@ -69,7 +83,7 @@ class TrainingController extends Controller
             ], 400);
         }
 
-        $training_img = $request->file('training_img')->store('training', ['disk' => 'public']);
+        $training_img = $request->file('training_img')->store('public/uploads/training/images');
         $trainingImgPath = asset('uploads/' . $training_img);
         // $training_materials = $request->file('training_materials')->store('materials', ['disk' => 'public']);
         // $trainingMaterialsPath = asset('uploads/' . $training_materials);
@@ -77,7 +91,7 @@ class TrainingController extends Controller
         try {
             Training::create([
                 'training_name' => $request->post('training_name'),
-                'training_img' => $trainingImgPath,
+                'training_img' => Str::remove('public/', $training_img),
                 'training_desc' => $request->post('training_desc'),
                 'training_price' => $request->post('training_price'),
                 'training_start' => $request->post('training_start'),
@@ -111,6 +125,11 @@ class TrainingController extends Controller
             $training->status = 'Belum Mendaftar';
         }
         
+        if ($training->training_img) {
+            $training->training_img = url('storage/' . $training->training_img);
+        } else {
+            $training->training_img = null;
+        }
         return ResponseFormatter::success($training, 'success');
     }
 
