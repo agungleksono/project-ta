@@ -61,7 +61,7 @@ class TrainingRecordController extends Controller
             'training_end' => $trainingRecord->training->training_end,
             'whatsapp_group' => $trainingRecord->training->whatsapp_group,
             'trainer_name' => $trainingRecord->training->trainer['name'],
-            'trainer_cv' => $trainingRecord->training->trainer['cv'],
+            'trainer_cv' => url('storage/' . $trainingRecord->training->trainer['cv']),
             'training_materials' => $trainingRecord->training->training_materials,
             'training_certificate' => $trainingRecord->training_certificate,
             'competence_certificate' => $trainingRecord->competence_certificate,

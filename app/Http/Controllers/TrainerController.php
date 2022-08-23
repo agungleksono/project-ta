@@ -22,6 +22,9 @@ class TrainerController extends Controller
                         ->orderBy('users.created_at', 'desc')
                         ->get();
             // $trainers = User::with(['trainer'])->where('status', 3)->get();
+            foreach($trainers as $trainer) {
+                $trainer->cv = url('storage/' . $trainer->cv);
+            }
             return ResponseFormatter::success($trainers, 'success');            
         } catch (\Throwable $th) {
             return ResponseFormatter::error(null, $th, 400);
@@ -31,13 +34,14 @@ class TrainerController extends Controller
     public function show($id)
     {
         try {
-            $customer = User::with(['trainer'])
+            $trainer = User::with(['trainer'])
                         ->where('id', $id)
                         ->where('status', 3)
                         ->first();
 
-            if (!$customer) return ResponseFormatter::error(null, 'Data not found');
-            return ResponseFormatter::success($customer, 'success');
+            if (!$trainer) return ResponseFormatter::error(null, 'Data not found');
+            $trainer->trainer_cv_path = url('storage/' . $trainer->trainer['cv']);
+            return ResponseFormatter::success($trainer, 'success');
         } catch (\Throwable $th) {
             return ResponseFormatter::error(null, $th, 400);
         }

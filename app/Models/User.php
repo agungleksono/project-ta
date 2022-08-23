@@ -75,6 +75,7 @@ class User extends Authenticatable
             'address' => $trainer->address,
             'phone' => $trainer->phone,
             'photo' => $trainer->photo,
+            'cv' => $trainer->cv,
         ];
     }
 

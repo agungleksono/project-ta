@@ -115,7 +115,7 @@ class AuthController extends Controller
         $path = asset('storage/' . $trainer_cv);
 
         try {
-            DB::transaction(function () use($request, $path) {
+            DB::transaction(function () use($request, $trainer_cv) {
                 $user = User::create([
                     'username' => $request->username,
                     'email' => $request->email,
@@ -127,7 +127,7 @@ class AuthController extends Controller
                     'name' => $request->name,
                     'address' => $request->address,
                     'phone' => $request->phone,
-                    'cv' => $path,
+                    'cv' => $trainer_cv,
                     'user_id' => $user->id,
                 ]);
             });
