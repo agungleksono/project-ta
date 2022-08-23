@@ -127,7 +127,7 @@ class AuthController extends Controller
                     'name' => $request->name,
                     'address' => $request->address,
                     'phone' => $request->phone,
-                    'cv' => $trainer_cv,
+                    'cv' => Str::remove('public/', $trainer_cv),
                     'user_id' => $user->id,
                 ]);
             });
