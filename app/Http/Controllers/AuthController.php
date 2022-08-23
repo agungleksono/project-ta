@@ -111,8 +111,8 @@ class AuthController extends Controller
             return ResponseFormatter::error(null, $validator->errors()->first(), 400);
         }
 
-        $trainer_cv = $request->file('cv')->store('trainer/cv', ['disk' => 'public']);
-        $path = asset('uploads/' . $trainer_cv);
+        $trainer_cv = $request->file('cv')->store('trainer/cv');
+        $path = asset('storage/' . $trainer_cv);
 
         try {
             DB::transaction(function () use($request, $path) {
