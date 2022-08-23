@@ -30,7 +30,7 @@
 			<div class="col-4 p-4 rounded" id="card">
 				<form action="" class="loginForm">
 					<div class="container">
-						<img src="{{ url('image/logo_pt.png') }}" class="img-fluid mb-3" alt="logo">
+						<img src="{{ url('image/logo_pt.PNG') }}" class="img-fluid mb-3" alt="logo">
 					</div>
 					<div class="input-group mb-3">
 						<span class="input-group-text"><i class="bi bi-at"></i></span>
