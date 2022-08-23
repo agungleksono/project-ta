@@ -28,13 +28,13 @@
 		</div> -->
 		<div class="container text-center">
 			<div class="col-4 p-4 rounded" id="card">
-				<form action="" class="loginForm">
+				<form method="POST" action="" class="loginForm">
 					<div class="container">
 						<img src="{{ url('image/logo_pt.PNG') }}" class="img-fluid mb-3" alt="logo">
 					</div>
 					<div class="input-group mb-3">
 						<span class="input-group-text"><i class="bi bi-at"></i></span>
-						<input type="text" class="form-control" name="email" id="email" placeholder="Email" required autofocus>
+						<input type="email" class="form-control" name="email" id="email" placeholder="Email" required autofocus>
 					</div>
 					<div class="input-group mb-3">
 						<span class="input-group-text"><i class="bi bi-lock"></i></span>
@@ -68,14 +68,15 @@
 					console.log(response);
 					if (response.meta.status == 'success') {
 						document.cookie = `token=${response.data.api_token}`;
-						window.location = "{{ url('/admin') }}";
+						window.location.href = "{{ url('/admin') }}";
 					}
 				})
 			}
 
 			const loginForm = document.querySelector('.loginForm');
 
-			loginForm.addEventListener('submit', function() {
+			loginForm.addEventListener('submit', e => {
+				e.preventDefault();
 				login();
 			});
 		</script>
