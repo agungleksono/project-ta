@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('login');
+    // return view('welcome');
+})->name('login');
 
 Route::get('/trainings', [TrainingController::class, 'index']);
 // Route::get('/login', [AuthController::class, 'login']);
@@ -27,7 +28,7 @@ Route::get('/dashboard', function() {
 });
 Route::get('/login', function() {
     return view('login');
-})->name('login');
+});
 Route::get('/admin', function() {
     return view('dashboard.admins.index');
 });
@@ -55,4 +56,10 @@ Route::middleware('token')->group(function() {
     Route::get('/admin/transaksi', function() {
         return view('dashboard.admins.invoice');
     })->name('invoice');
+    Route::get('/trainer/dashboard', function() {
+        return view('dashboard.trainers.dashboard');
+    })->name('trainer_dashboard');
+    Route::get('/trainer/pelatihan', function() {
+        return view('dashboard.trainers.training');
+    })->name('trainer_training');
 });

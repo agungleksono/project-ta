@@ -28,19 +28,22 @@
 		</div> -->
 		<div class="container text-center">
 			<div class="col-4 p-4 rounded" id="card">
-				<!-- <form action=""> -->
+				<form action="" class="loginForm">
+					<div class="container">
+						<img src="image/logo_pt.png" class="img-fluid mb-3" alt="logo">
+					</div>
 					<div class="input-group mb-3">
 						<span class="input-group-text"><i class="bi bi-at"></i></span>
-						<input type="text" class="form-control" name="email" id="email" placeholder="Email" autofocus>
+						<input type="text" class="form-control" name="email" id="email" placeholder="Email" required autofocus>
 					</div>
 					<div class="input-group mb-3">
 						<span class="input-group-text"><i class="bi bi-lock"></i></span>
-						<input type="text" class="form-control" name="password" id="password" placeholder="Password">
+						<input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
 					</div>
 					<div class="d-grid gap-2">
 						<button type="submit" class="btn btn-block btn-login text-light">Masuk</button>					
 					</div>
-				<!-- </form> -->
+				</form>
 			</div>
 		</div>
 
@@ -70,8 +73,9 @@
 				})
 			}
 
-			const btnLogin = document.querySelector('.btn-login');
-			btnLogin.addEventListener('click', function() {
+			const loginForm = document.querySelector('.loginForm');
+
+			loginForm.addEventListener('submit', function() {
 				login();
 			});
 		</script>
