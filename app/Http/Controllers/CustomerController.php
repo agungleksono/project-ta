@@ -64,17 +64,22 @@ class CustomerController extends Controller
 
         $userData = User::with(['customer'])
                             ->where('id', '=', Auth::id())
-                            ->get();
+                            ->first();
         
-        if ($userData->isEmpty()) return ResponseFormatter::error(null, 'User not found', 400);
+        // if ($userData->isEmpty()) return ResponseFormatter::error(null, 'User not found', 400);
+        // return $userData;
 
         $responseData = [
             'id' => Auth::id(),
             'username' => Auth::user()->username,
             'email' => Auth::user()->email,
             'api_token' => Auth::user()->api_token,
+            'name' => $userData->customer['name'],
+            'address' => $userData->customer['address'],
+            'phone' => $userData->customer['phone'],
+            'photo' => url('storage/' . $userData->customer['photo']) ,
         ];
-        $responseData += $userData[0]->customer;
+        // $responseData += $userData[0]->customer;
 
         return ResponseFormatter::success($responseData, 'Success');
     }
@@ -146,17 +151,17 @@ class CustomerController extends Controller
         }
 
         // Save new image
-        $photo = $request->file('photo')->store('avatar/customer', ['disk' => 'public']);
+        $photo = $request->file('photo')->store('uploads/avatar/customer');
         // $path = FileFormatter::name($photo);
-        $path = asset('uploads/' . $photo);
+        // $path = asset('uploads/' . $photo);
         // $path = asset('storage/' . $photo);
         DB::table('customers')
             ->where('user_id', Auth::id())
             ->update([
-                'photo' => $path,
+                'photo' => Str::remove('public/', $photo),
             ]);
         
-        return ResponseFormatter::success($path, 'Image updated successfully');
+        return ResponseFormatter::success(url('storage/' . $photo), 'Image updated successfully');
     }
 
     public function destroy($id)
