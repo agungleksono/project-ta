@@ -77,7 +77,7 @@ class CustomerController extends Controller
             'name' => $userData->customer['name'],
             'address' => $userData->customer['address'],
             'phone' => $userData->customer['phone'],
-            'photo' => url('storage/' . $userData->customer['photo']) ,
+            'photo' => $userData->customer['photo'] ? url('storage/' . $userData->customer['photo']) : null,
         ];
         // $responseData += $userData[0]->customer;
 
