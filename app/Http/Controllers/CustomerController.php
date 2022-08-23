@@ -161,7 +161,7 @@ class CustomerController extends Controller
                 'photo' => Str::remove('public/', $photo),
             ]);
         
-        return ResponseFormatter::success(url('storage/' . $photo), 'Image updated successfully');
+        return ResponseFormatter::success(url('storage/' . Str::remove('public/', $photo)), 'Image updated successfully');
     }
 
     public function destroy($id)
