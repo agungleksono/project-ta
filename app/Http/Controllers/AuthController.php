@@ -111,11 +111,11 @@ class AuthController extends Controller
             return ResponseFormatter::error(null, $validator->errors()->first(), 400);
         }
 
-        $trainer_cv = $request->file('cv')->store('public/uploads/trainer/cv');
+        $trainer_cv = $request->file('cv')->store('uploads/trainer/cv');
         $path = asset('storage/' . $trainer_cv);
 
         try {
-            DB::transaction(function () use($request, $trainer_cv) {
+            DB::transaction(function () use($request, $path) {
                 $user = User::create([
                     'username' => $request->username,
                     'email' => $request->email,
@@ -127,7 +127,7 @@ class AuthController extends Controller
                     'name' => $request->name,
                     'address' => $request->address,
                     'phone' => $request->phone,
-                    'cv' => $trainer_cv,
+                    'cv' => $path,
                     'user_id' => $user->id,
                 ]);
             });
