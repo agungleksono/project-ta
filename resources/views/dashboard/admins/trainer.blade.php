@@ -189,7 +189,7 @@
 				<input type="text" value="${trainer.trainer.phone}" readonly class="form-control">
 			</div>
 			<div class="d-grid gap-2 col-6 mx-auto">
-				<a class="btn btn-info btn-sm" href="${trainer.trainer.cv}" role="button">Lihat CV</a>
+				<a class="btn btn-info btn-sm" href="${trainer.trainer_cv_path}" role="button">Lihat CV</a>
 			</div>
 		`
 	}
