@@ -142,16 +142,16 @@ class CustomerController extends Controller
     public function updateProfilePicture(Request $request)
     {
         $customer = Customer::where('user_id', Auth::id())->get();
-        if (!$customer) {
-            return ResponseFormatter::error(null, 'Data not found', 400);
-        } else {
-            if ($customer[0]->photo) {
-                Helper::deleteFileOnStorage($customer[0]->photo);
-            }
-        }
+        // if (!$customer) {
+        //     return ResponseFormatter::error(null, 'Data not found', 400);
+        // } else {
+        //     if ($customer[0]->photo) {
+        //         Helper::deleteFileOnStorage($customer[0]->photo);
+        //     }
+        // }
 
         // Save new image
-        $photo = $request->file('photo')->store('uploads/avatar/customer');
+        $photo = $request->file('photo')->store('public/uploads/avatar/customer');
         // $path = FileFormatter::name($photo);
         // $path = asset('uploads/' . $photo);
         // $path = asset('storage/' . $photo);
