@@ -129,29 +129,29 @@ class TrainingRecordController extends Controller
         $customer = Customer::where('user_id', Auth::id())->first();
         $customerDocuments = CustomerDocument::where('customer_id', $customer->id)->first();
 
-        $cv = $request->file('cv')->store('customer_documents/' . $customer->id, ['disk' => 'public']);
-        $cvPath = asset('uploads/' . $cv);
+        $cv = $request->file('cv')->store('public/uploads/customer_documents/' . $customer->id);
+        $cvPath = asset('storage/' . $cv);
 
-        $ktp = $request->file('ktp')->store('customer_documents/' . $customer->id, ['disk' => 'public']);
-        $ktpPath = asset('uploads/' . $ktp);
+        $ktp = $request->file('ktp')->store('public/uploads/customer_documents/' . $customer->id);
+        $ktpPath = asset('storage/' . $ktp);
 
-        $ijazah = $request->file('ijazah')->store('customer_documents/' . $customer->id, ['disk' => 'public']);
-        $ijazahPath = asset('uploads/' . $ijazah);
+        $ijazah = $request->file('ijazah')->store('public/uploads/customer_documents/' . $customer->id);
+        $ijazahPath = asset('storage/' . $ijazah);
 
-        $workExperience = $request->file('work_experience')->store('customer_documents/' . $customer->id, ['disk' => 'public']);
-        $workExperiencePath = asset('uploads/' . $workExperience);
+        $workExperience = $request->file('work_experience')->store('public/uploads/customer_documents/' . $customer->id);
+        $workExperiencePath = asset('storage/' . $workExperience);
 
-        $portfolio = $request->file('portfolio')->store('customer_documents/' . $customer->id, ['disk' => 'public']);
-        $portfolioPath = asset('uploads/' . $portfolio);
+        $portfolio = $request->file('portfolio')->store('public/uploads/customer_documents/' . $customer->id);
+        $portfolioPath = asset('storage/' . $portfolio);
 
         if (!$customerDocuments) {
             try {
                 CustomerDocument::create([
-                    'cv' => $cvPath,
-                    'ktp' => $ktpPath,
-                    'ijazah' => $ijazahPath,
-                    'work_experience' => $workExperiencePath,
-                    'portfolio' => $portfolioPath,
+                    'cv' => Str::remove('public/', $cv),
+                    'ktp' => Str::remove('public/', $ktp),
+                    'ijazah' => Str::remove('public/', $ijazah),
+                    'work_experience' => Str::remove('public/', $workExperience),
+                    'portfolio' => Str::remove('public/', $portfolio),
                     'customer_id' => $customer->id,
                 ]);
                 
@@ -161,8 +161,23 @@ class TrainingRecordController extends Controller
                 return ResponseFormatter::error(null, 'insert error: ' . $th, 400);
             }
         } elseif ($customerDocuments) {
-            Helper::deleteFileOnStorage([$cvPath, $ktpPath, $ijazahPath, $workExperiencePath, $portfolioPath]);
-            return ResponseFormatter::error(null, 'Already upload the file', 400);
+            try {
+                CustomerDocument::where('customer_id', $customer->id)->update([
+                    'cv' => Str::remove('public/', $cv),
+                    'ktp' => Str::remove('public/', $ktp),
+                    'ijazah' => Str::remove('public/', $ijazah),
+                    'work_experience' => Str::remove('public/', $workExperience),
+                    'portfolio' => Str::remove('public/', $portfolio),
+                    'customer_id' => $customer->id,
+                ]);
+                
+                return ResponseFormatter::success(null, 'File uploaded');
+            } catch (\Throwable $th) {
+                Helper::deleteFileOnStorage([$cvPath, $ktpPath, $ijazahPath, $workExperiencePath, $portfolioPath]);
+                return ResponseFormatter::error(null, 'insert error: ' . $th, 400);
+            }
+            // Helper::deleteFileOnStorage([$cvPath, $ktpPath, $ijazahPath, $workExperiencePath, $portfolioPath]);
+            // return ResponseFormatter::error(null, 'Already upload the file', 400);
         }
         // else {
         //     try {
