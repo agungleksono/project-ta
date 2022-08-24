@@ -52,6 +52,7 @@ class TrainingRecordController extends Controller
     public function showCustomerTrainingRecord($id) {
         // $training = TrainingRecord::find($id);
         $trainingRecord = TrainingRecord::with(['training', 'customer'])->find($id);
+        // return $trainingRecord->training->trainer['cv'];
         // $customerDocuments = CustomerDocument::find($trainingRecord->customer->id, 'customer_id')->first();
         $customerDocuments = CustomerDocument::where('customer_id', $trainingRecord->customer->id)->first();
                 
@@ -64,16 +65,16 @@ class TrainingRecordController extends Controller
             'training_end' => $trainingRecord->training->training_end,
             'whatsapp_group' => $trainingRecord->training->whatsapp_group,
             'trainer_name' => $trainingRecord->training->trainer['name'],
-            'trainer_cv' => url('storage/' . $trainingRecord->training->trainer['cv']),
-            'training_materials' => $trainingRecord->training->training_materials,
-            'training_certificate' => $trainingRecord->training_certificate,
-            'competence_certificate' => $trainingRecord->competence_certificate,
+            'trainer_cv' => $trainingRecord->training->trainer['cv'] ? url('storage/' . $trainingRecord->training->trainer['cv']) : null,
+            'training_materials' => $trainingRecord->training->training_materials ? url('storage/' . $trainingRecord->training->training_materials) : null,
+            'training_certificate' => $trainingRecord->training_certificate ? url('storage/' . $trainingRecord->training_certificate) : null,
+            'competence_certificate' => $trainingRecord->competence_certificate ? url('storage/' . $trainingRecord->competence_certificate) : null,
         ];
 
         if ($trainingRecord->training->training_end < now()) {
-            $responseData += ['status' => 1];
+            $responseData += ['status' => 'Selesai'];
         } else {
-            $responseData += ['status' => 0];
+            $responseData += ['status' => 'Sedang Berjalan'];
         }
         
         if (!$customerDocuments) {
