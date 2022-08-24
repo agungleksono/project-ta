@@ -59,6 +59,9 @@ Route::middleware('token')->group(function() {
     Route::get('/admin/transaksi', function() {
         return view('dashboard.admins.invoice');
     })->name('invoice');
+    Route::get('/admin/upload-sertifikat/{id}', function() {
+        return view('dashboard.admins.certificate');
+    })->name('certificate');
     Route::get('/trainer/dashboard', function() {
         return view('dashboard.trainers.dashboard');
     })->name('trainer_dashboard');

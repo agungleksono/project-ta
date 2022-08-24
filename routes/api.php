@@ -72,6 +72,10 @@ Route::prefix('v1')->group(function() {
         Route::get('/followup_trainings', [TrainingRecordController::class, 'getCustomerTrainingRecords']);
         Route::get('/followup_training/{id}', [TrainingRecordController::class, 'showCustomerTrainingRecord']);
         Route::post('/training/requirements', [TrainingRecordController::class, 'uploadTrainingRequirements']);
+        
+        Route::get('/training_record/customers/{id}', [TrainingRecordController::class, 'getTrainingCustomers']);
+        Route::post('/training_record/competence_certificate/{id}', [TrainingRecordController::class, 'uploadCompetenceCertificate']);
+        Route::post('/training_record/training_certificate/{id}', [TrainingRecordController::class, 'uploadTrainingCertificate']);
 
         // Admin
         Route::get('/customers', [CustomerController::class, 'index']);

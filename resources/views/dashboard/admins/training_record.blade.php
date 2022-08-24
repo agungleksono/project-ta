@@ -23,7 +23,7 @@
 					<th class="text-center">Tanggal Pelatihan</th>
 					<th class="text-center">Trainer</th>
 					<th class="text-center">Status</th>
-					<th colspan="2" class="text-center">Aksi</th>
+					<th colspan="3" class="text-center">Aksi</th>
 				</tr>
 			</thead>
 			<tbody class="table-container">
@@ -82,6 +82,7 @@
 					
 					<td class="td-last"><a class="btn btn-outline-primary btn-sm btn-detail" href="#" onclick="showDetailData(${training.id})" role="button" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="bi bi-info-square"></i><span class="d-none d-lg-inline ms-1">Detail</span></a></td>
 					<td class="td-last"><a class="btn btn-outline-danger btn-sm" href="#" onclick="deleteConfirmation(${training.id}, '${training.training_name}')" role="button"><i class="bi bi-trash"></i><span class="d-none d-lg-inline ms-1">Hapus</span></a></td>
+					<td class="td-last"><a class="btn btn-outline-success btn-sm btn-detail" href="{{ url('/admin/upload-sertifikat/${training.id}') }}" role="button"><i class="bi bi-upload"></i><span class="d-none d-lg-inline ms-1">Upload Sertifikat</span></a></td>
 					
 				</tr>
 			`

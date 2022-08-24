@@ -6,12 +6,14 @@ use App\Helpers\Helper;
 use App\Helpers\ResponseFormatter;
 use App\Models\Customer;
 use App\Models\CustomerDocument;
+use App\Models\Training;
 use App\Models\TrainingRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TrainingRecordController extends Controller
 {
@@ -189,14 +191,38 @@ class TrainingRecordController extends Controller
         return ResponseFormatter::error(null, 'Failed to upload', 400);
     }
 
-    public function create()
+    public function getTrainingCustomers($training_id)
     {
-        //
+        $customers = TrainingRecord::with(['customer', 'training'])->where('training_id', $training_id)->get();
+        return ResponseFormatter::success($customers, 'success');
     }
 
-    public function store(Request $request)
+    public function uploadCompetenceCertificate(Request $request, $trainingRecorId)
     {
-        //
+        $competenceCertificate = $request->file('competence_certificate')->store('public/uploads/certificate/competence');
+        // $trainingCertificate = $request->file('training_certificate')->store('public/uploads/certificate/training');
+
+        DB::table('training_records')
+            ->where('id', $trainingRecorId)
+            ->update([
+                'competence_certificate' => Str::remove('public/', $competenceCertificate),
+                // 'training_certificate' => Str::remove('public/', $trainingCertificate),
+            ]);
+        
+        return ResponseFormatter::success(null, 'success');
+    }
+
+    public function uploadTrainingCertificate(Request $request, $trainingRecorId)
+    {
+        $trainingCertificate = $request->file('training_certificate')->store('public/uploads/certificate/training');
+
+        DB::table('training_records')
+            ->where('id', $trainingRecorId)
+            ->update([
+                'training_certificate' => Str::remove('public/', $trainingCertificate),
+            ]);
+        
+        return ResponseFormatter::success(null, 'success');
     }
 
     public function show($id)
