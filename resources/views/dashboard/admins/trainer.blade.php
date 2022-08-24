@@ -205,10 +205,14 @@
 			if (willDelete) {
 				try {
 					deleteData(`{{ url('/api/v1/trainer/${id}') }}`, token);
-					swal("Data berhasil dihapus", {
+					swal({
+						title: "Sukses",
+						text: "Data berhasil dihapus.",
 						icon: "success",
-					});
-					showData()
+						buttons: true,
+					})
+					.then((value) => window.location.href = `{{ url('/admin/trainer') }}`);
+					// showData()
 				} catch (error) {					
 					swal("Data gagal dihapus", {
 						icon: "error",
