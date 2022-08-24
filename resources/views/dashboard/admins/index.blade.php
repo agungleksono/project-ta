@@ -1,101 +1,102 @@
 @extends('dashboard.layouts.main')
 
 @section('container')
-<!-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-<h1 class="h2">Dashboard</h1>
-</div> -->
-
-<div class="card mt-4">
-	<div class="card-header">
-		<h2>Admin</h2>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<!-- <h1 class="h4">Informasi Pengguna</h1> -->
+<h1 class="h4">Dashboard</h1>
+</div>
+<div class="row mb-2">
+	<h5>Informasi Pengguna</h5>
+</div>
+<div class="container row">
+	<div class="col-md-3 mb-5 me-4 bg-body rounded card-dashboard position-relative border-start border-warning border-5" id="card">
+		<h6 class="position-absolute top-0 start-0 mt-2 ms-4">Customer</h6>
+		<div class="total-customer-container">
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4"></h1>
+		</div>
+		<span class="position-absolute bottom-0 start-0 text-success mb-3 ms-4">Total customer aktif</span>
+		<i class="bi bi-people position-absolute bottom-0 end-0 me-3 mb-3" style="font-size: 4rem; color: #F5941A;"></i>
 	</div>
-	<div class="card-body">
-		<h5 class="card-title">Tabel Admin</h5>
-		<div>
-			<a class="btn btn-primary btn-sm my-2" href="#"><i class="bi bi-plus-square me-2"></i>Tambah Data</a>
+	<div class="col-md-3 mb-5 me-4 bg-body rounded card-dashboard position-relative border-start border-warning border-5" id="card">
+		<h6 class="position-absolute top-0 start-0 mt-2 ms-4">Trainer</h6>
+		<div class="total-trainer-container">
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4"></h1>
 		</div>
-		<div class="table-responsive-sm">
-			<table class="table table-hover text-center">
-			<thead>
-				<tr>
-					<th scope="col">No.</th>
-					<th scope="col">Nama</th>
-					<th scope="col">Alamat</th>
-					<th scope="col">Aksi</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th>1</th>
-					<td>Mark Zuckeberg</td>
-					<td>Semarang</td>
-					<td>
-						<a class="btn btn-outline-primary btn-sm" href="#" role="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-info-square"></i><span class="d-none d-lg-inline ms-1">Detail</span></a>
-						<a class="btn btn-outline-success btn-sm" href="#" role="button"><i class="bi bi-pencil-square"></i><span class="d-none d-lg-inline ms-1">Ubah</span></a>
-						<a class="btn btn-outline-danger btn-sm" href="#" role="button"><i class="bi bi-trash"></i><span class="d-none d-lg-inline ms-1">Hapus</span></a>
-					</td>
-				</tr>
-				<tr>
-					<th>2</th>
-					<td>Jacob</td>
-					<td>Semarang</td>
-					<td>
-						<a class="btn btn-outline-primary btn-sm" href="#" role="button"><i class="bi bi-info-square"></i><span class="d-none d-lg-inline ms-1">Detail</span></a>
-						<a class="btn btn-outline-success btn-sm" href="#" role="button"><i class="bi bi-pencil-square"></i><span class="d-none d-lg-inline ms-1">Ubah</span></a>
-						<a class="btn btn-outline-danger btn-sm" href="#" role="button"><i class="bi bi-trash"></i><span class="d-none d-lg-inline ms-1">Hapus</span></a>
-					</td>
-				</tr>
-				<tr>
-					<th>3</th>
-					<td>Larry the Bird</td>
-					<td>Semarang</td>
-					<td>
-						<a class="btn btn-outline-primary btn-sm" href="#" role="button"><i class="bi bi-info-square"></i><span class="d-none d-lg-inline ms-1">Detail</span></a>
-						<a class="btn btn-outline-success btn-sm" href="#" role="button"><i class="bi bi-pencil-square"></i><span class="d-none d-lg-inline ms-1">Ubah</span></a>
-						<a class="btn btn-outline-danger btn-sm" href="#" role="button"><i class="bi bi-trash"></i><span class="d-none d-lg-inline ms-1">Hapus</span></a>
-					</td>
-				</tr>
-			</tbody>
-			</table>
-		</div>
+		<span class="position-absolute bottom-0 start-0 text-success mb-3 ms-4">Total trainer aktif</span>
+		<i class="bi bi-person-video3 position-absolute bottom-0 end-0 me-3 mb-3" style="font-size: 4rem; color: #F5941A;"></i>
 	</div>
 </div>
+
+<div class="row mb-2">
+	<h5>Informasi Training</h5>
+</div>
+<div class="container row">
+	<div class="col-md-3 mb-5 me-4 bg-body rounded card-dashboard position-relative border-start border-success border-5" id="card">
+		<h6 class="position-absolute top-0 start-0 mt-2 ms-4">Total Training</h6>
+		<div class="total-training-container">
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4"></h1>
+		</div>
+		<!-- <span class="position-absolute bottom-0 start-0 text-success mb-3 ms-4">Total customer aktif</span> -->
+		<i class="bi bi-mortarboard position-absolute bottom-0 end-0 me-3 mb-3" style="font-size: 4rem; color: #90EE90;"></i>
+	</div>
+	<div class="col-md-3 mb-5 me-4 bg-body rounded card-dashboard position-relative border-start border-info border-5" id="card">
+		<h6 class="position-absolute top-0 start-0 mt-2 ms-4">Training aktif</h6>
+		<div class="training-active-container">
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4"></h1>
+		</div>
+		<!-- <span class="position-absolute bottom-0 start-0 text-success mb-3 ms-4">Total trainer aktif</span> -->
+		<i class="bi bi-calendar-week position-absolute bottom-0 end-0 me-3 mb-3" style="font-size: 4rem; color: #00CED1;"></i>
+	</div>
+	<div class="col-md-3 mb-5 me-4 bg-body rounded card-dashboard position-relative border-start border-secondary border-5" id="card">
+		<h6 class="position-absolute top-0 start-0 mt-2 ms-4">Training Selesai</h6>
+		<div class="training-end-container">
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4"></h1>
+		</div>
+		<!-- <span class="position-absolute bottom-0 start-0 text-success mb-3 ms-4">Total customer aktif</span> -->
+		<i class="bi bi-check-all position-absolute bottom-0 end-0 me-3 mb-3" style="font-size: 4rem; color: #D3D3D3;"></i>
+	</div>
+	<!-- <div class="col-md-3 mb-5bg-body rounded card-dashboard position-relative border-start border-warning border-5" id="card">
+		<h6 class="position-absolute top-0 start-0 mt-2 ms-4">Total Training</h6>
+		<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4">12</h1>
+		<span class="position-absolute bottom-0 start-0 text-success mb-3 ms-4">Total customer aktif</span>
+		<i class="bi bi-mortarboard position-absolute bottom-0 end-0 me-3 mb-3" style="font-size: 4rem; color: #F5941A;"></i>
+	</div> -->
+</div>
+
 @endsection
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="/js/script.js" type = "text/javascript"></script>
 <script>
 	const token = getCookie('token');
-	// let x = document.cookie
 	console.log(token);
 
-	fetch(`{{ url('/api/v1/trainings') }}`, {
-	// fetch("https://sisurty.herokuapp.com/api/v1/trainings", {
-		method: 'GET',
-		headers: {
-			"Content-type": "application/json",
-			"Accept": "application/json",
-			"Authorization" : `Bearer ${token}`
-		}
-	})
-	.then(response => response.json())
-	.then(response => console.log(response.data))
+	showData();
+
+	async function showData() {
+		const data = await getData(`{{ url('/api/v1/admin/dashboard') }}`, token);
+		console.log(data);
+		const customerContainer = document.querySelector('.total-customer-container');
+		const trainerContainer = document.querySelector('.total-trainer-container');
+		const trainingContainer = document.querySelector('.total-training-container');
+		const trainingActiveContainer = document.querySelector('.training-active-container');
+		const trainingEndContainer = document.querySelector('.training-end-container');
+
+		customerContainer.innerHTML = `
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4">${data.total_customers}</h1>
+		`
+		trainerContainer.innerHTML = `
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4">${data.total_trainers}</h1>
+		`
+		trainingContainer.innerHTML = `
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4">${data.total_trainings}</h1>
+		`
+		trainingActiveContainer.innerHTML = `
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4">${data.total_training_active}</h1>
+		`
+		trainingEndContainer.innerHTML = `
+			<h1 class="position-absolute top-50 start-0 translate-middle-y ms-4">${data.total_training_end}</h1>
+		`
+	}
 </script>

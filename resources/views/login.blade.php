@@ -68,7 +68,7 @@
 					console.log(response);
 					if (response.meta.status == 'success') {
 						document.cookie = `token=${response.data.api_token}`;
-						window.location.href = "{{ url('/admin') }}";
+						window.location.href = "{{ url('/admin/dashboard') }}";
 					}
 				})
 			}

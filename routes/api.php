@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TrainerController;
 use App\Http\Controllers\TrainingController;
@@ -49,6 +50,7 @@ Route::prefix('v1')->group(function() {
         Route::get('/admin/trainings', [TrainingController::class, 'getTrainings']);
         Route::get('/admin/training/{id}', [TrainingController::class, 'getDetailTraining']);
         Route::get('/admin/training_records', [TrainingController::class, 'getTrainingRecords']);
+        Route::get('/trainer/trainings', [TrainingController::class, 'getTrainingForTrainer']);
 
         // Invoice
         Route::get('/invoices', [InvoiceController::class, 'index']);
@@ -75,6 +77,9 @@ Route::prefix('v1')->group(function() {
         Route::get('/customers', [CustomerController::class, 'index']);
         Route::get('/customer/{id}', [CustomerController::class, 'show']);
         Route::delete('/customer/{id}', [CustomerController::class, 'destroy']);
+
+        // Dashboard
+        Route::get('/admin/dashboard', [DashboardController::class, 'statistic']);
     });
     Route::post('/logintest', [AuthController::class, 'loginTest']);
     Route::get('/test', [AuthController::class, 'test']);

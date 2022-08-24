@@ -35,6 +35,9 @@ Route::get('/admin', function() {
 
 
 Route::middleware('token')->group(function() {
+    Route::get('/admin/dashboard', function() {
+        return view('dashboard.admins.index');
+    })->name('admin_dashboard');
     Route::get('/admin/customers', function() {
         return view('dashboard.admins.customer');
     })->name('customers');
