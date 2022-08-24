@@ -123,15 +123,19 @@ class CustomerController extends Controller
 
             $userData = User::with(['customer'])
                             ->where('id', '=', Auth::id())
-                            ->get();
+                            ->first();
             
             $responseData = [
                 'id' => Auth::id(),
-                'username' => $userData[0]->username,
-                'email' => $userData[0]->email,
+                'username' => $userData->username,
+                'email' => $userData->email,
                 'api_token' => Auth::user()->api_token,
+                'name' => $userData->customer['name'],
+                'address' => $userData->customer['address'],
+                'phone' => $userData->customer['phone'],
+                'photo' => url('storage/' . $userData->customer['photo'])
             ];
-            $responseData += $userData[0]->customer;
+            // $responseData += $userData[0]->customer;
             
             return ResponseFormatter::success($responseData, 'Update profile success');
         } catch (\Throwable $th) {
