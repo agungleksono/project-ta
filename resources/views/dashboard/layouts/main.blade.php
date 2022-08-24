@@ -12,7 +12,7 @@
 		
 		<!-- Custom styles for this template -->
 		<link href="/css/dashboard.css" rel="stylesheet">
-		<link href="/css/style.css" rel="stylesheet">
+		<link href="{{ url('/css/style.css') }}" rel="stylesheet">
 
 		<!-- Bootstrap icon -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
