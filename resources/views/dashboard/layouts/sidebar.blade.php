@@ -46,7 +46,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link mx-2 rounded {{ Request::is('admin/transaksi') ? 'active' : '' }}" href="{{ route('vacancies') }}">
+        <a class="nav-link mx-2 rounded {{ Request::is('admin/lowongan-kerja') ? 'active' : '' }}" href="{{ route('vacancies') }}">
         <span class="align-text-center me-1"><i class="bi bi-briefcase" style="font-size: 1rem;"></i></span>
           Lowongan Pekerjaan
         </a>
