@@ -22,7 +22,7 @@ class VacancyController extends Controller
             return ResponseFormatter::success($vacancies, 'Success');
         }
 
-        return ResponseFormatter::error(null, 'Data not found', 400);
+        return ResponseFormatter::success(null, 'Data empty');
     }
 
     public function show($id)

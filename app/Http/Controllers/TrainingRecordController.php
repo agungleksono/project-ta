@@ -40,9 +40,9 @@ class TrainingRecordController extends Controller
             ];
 
             if ($training->training->training_end < now()) {
-                $responseData += ['status' => 1];
+                $responseData += ['status' => 'Selesai'];
             } else {
-                $responseData += ['status' => 0];
+                $responseData += ['status' => 'Sedang Berjalan'];
             }
             array_push($data, $responseData);
         }
