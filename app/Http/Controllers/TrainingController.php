@@ -52,6 +52,12 @@ class TrainingController extends Controller
         } else {
             $training->training_img = null;
         }
+
+        if ($training->training_materials) {
+            $training->training_materials = url('storage/' . $training->training_materials);
+        } else {
+            $training->training_materials = null;
+        }
         
         return ResponseFormatter::success($training, 'success');
     }

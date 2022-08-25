@@ -53,7 +53,7 @@
 </div>
 <!-- Akhir Modal Detail -->
 
-<!-- Awal Modal Upload CV -->
+<!-- Awal Modal Upload Materi -->
 <div class="modal fade" id="uploadCvModal" tabindex="-1" aria-labelledby="uploadCvLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
@@ -64,19 +64,19 @@
 		<div class="modal-body px-4 upload-cv-container">
 			<!-- <form action="" id="uploadForm"> -->
 				<div class="row">
-					<label class="form-label" for="cv">Pilih CV</label>
-					<input type="file" class="form-control" name="cv" id="cv" required>
+					<label class="form-label" for="training_materials">Pilih Materi</label>
+					<input type="file" class="form-control" name="training_materials" id="training_materials" required>
 				</div>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-primary" onclick="uploadCertificate()">Tambah</button>
+			<button type="button" class="btn btn-primary" onclick="uploadMaterial()">Tambah</button>
 		</div>
 		<!-- </form> -->
 		</div>
 	</div>
 </div>
-<!-- Akhir Modal Upload CV -->
+<!-- Akhir Modal Upload Materi -->
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="/js/script.js" type = "text/javascript"></script>
@@ -93,6 +93,7 @@
 		let rowTable = '';
 		// let isMaterialsNull = '';
 		let number = 0;
+		let trainingId = '';
 		const currentDate = new Date();
 
 		trainings.forEach(training => {
@@ -105,7 +106,7 @@
 					<td class="text-center">${dateFormatCompare(currentDate) > dateFormatter(training.training_end) ? '<span class="badge bg-secondary text-light px-4">Selesai</span>' : dateFormatCompare(training.training_start) <= dateFormatCompare(currentDate) ? '<span class="badge bg-warning text-light">Sedang Berjalan</span>' : '<span class="badge bg-info text-light">Pendaftaran</span>'}</td>
 					
 					<td class="td-last"><a class="btn btn-outline-primary btn-sm btn-detail" href="#" onclick="showDetailData(${training.id})" role="button" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="bi bi-info-square"></i><span class="d-none d-lg-inline ms-1">Detail</span></a></td>
-					<td class="td-last"><a class="btn btn-outline-success btn-sm" href="#" role="button" data-bs-toggle="modal" data-bs-target="#uploadCvModal"><i class="bi bi-upload"></i><span class="d-none d-lg-inline ms-1">Upload</span></a></td>
+					<td class="td-last"><a class="btn btn-outline-success btn-sm" href="#" onclick="updateTrainingId(${training.id})" role="button" data-bs-toggle="modal" data-bs-target="#uploadCvModal"><i class="bi bi-upload"></i><span class="d-none d-lg-inline ms-1">Upload</span></a></td>
 					
 				</tr>
 			`
@@ -127,6 +128,10 @@
 
 		tableContainer.innerHTML = rowTable;
 		// console.log(isMaterialsNull);
+	}
+
+	function updateTrainingId(id) {
+		trainingId = id;
 	}
 
 	async function showDetailData(id) {
@@ -196,5 +201,38 @@
 				</div>
 			</div>
 		`
+	}
+
+	function uploadMaterial() {
+		const formData = new FormData();
+
+		formData.append('training_materials', document.getElementById('training_materials').files[0]);
+
+		fetch(`{{ url('/api/v1/trainer/upload_material/${trainingId}') }}`, {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'Authorization' : `Bearer ${token}`,
+				}
+			})
+			.then(response => response.json())
+			.then(json => {
+				console.log(json);
+				if (json.meta.status == 'error') {
+					return swal({
+						title: "Gagal",
+						text: `${json.meta.message}`,
+						icon: "error",
+					});
+				}
+				swal({
+					title: "Sukses",
+					text: "Berhasil menambahkan data.",
+					icon: "success",
+					buttons: true,
+				})
+				.then((value) => window.location.href = `{{ url('/trainer/pelatihan') }}`);
+			})
+			.catch(err => console.log(err))
 	}
 </script>

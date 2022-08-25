@@ -145,6 +145,33 @@ class TrainerController extends Controller
         }
     }
 
+    public function uploadMaterial(Request $request, $training_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'training_materials' => 'required|file',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseFormatter::error(null, $validator->errors()->first(), 400);
+        }
+
+        $training_materials = $request->file('training_materials')->store('public/uploads/training/materials');
+        $path = asset('storage/' . $training_materials);
+
+        try {
+            DB::table('trainings')
+                ->where('id', $training_id)
+                ->update([
+                    'training_materials' => Str::remove('public/', $training_materials),
+                ]);
+            
+            return ResponseFormatter::success(null, 'success');
+        } catch (\Throwable $th) {
+            Helper::deleteFileOnStorage($path);
+            return ResponseFormatter::error(null, $th, 400);
+        }
+    }
+
     public function show($id)
     {
         try {
