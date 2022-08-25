@@ -146,7 +146,7 @@
 		const profileContainer = document.querySelector('.profile-container');
 
 		imgContainer.innerHTML = `
-			<img src="${trainer.photo ? trainer.photo : `https://ui-avatars.com/api/?background=random&rounded=true&size=32&name=${trainer.trainer.name}`}" class="rounded-circle" alt="...">
+			<img src="${trainer.photo ? trainer.photo : `https://ui-avatars.com/api/?background=random&rounded=true&size=32&name=${trainer.name}`}" class="rounded-circle" alt="...">
 		`
 		profileContainer.innerHTML = `
 			<div class="mb-3 row">
