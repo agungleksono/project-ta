@@ -139,9 +139,40 @@ class TrainingController extends Controller
         return ResponseFormatter::success($training, 'success');
     }
 
-    public function edit($id)
+    function updateTraining(Request $request, $id)
     {
-        
+        $validator = Validator::make($request->all(), [
+            'training_name' => 'required|string',
+            'training_img' => 'image',
+            'training_desc' => 'required|string',
+            'training_price' => 'required|numeric',
+            'training_start' => 'required|date',
+            'training_end' => 'required|date',
+            'trainer_id' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseFormatter::error(null, $validator->errors()->first(), 400);
+        }
+
+        $training_img = $request->file('training_img')->store('public/uploads/training/images');
+        $path = asset('storage/' . $training_img);
+
+        try {
+            DB::table('trainings')->where('id', $id)->update([
+                'training_name' => $request->training_name,
+                'training_img' => Str::remove('public/', $training_img),
+                'training_desc' => $request->training_desc,
+                'training_price' => $request->training_price,
+                'training_start' => $request->training_start,
+                'training_end' => $request->training_end,
+                'trainer_id' => $request->trainer_id,
+            ]);
+
+            return ResponseFormatter::success(null, 'success');
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
     }
     
     public function update(Request $request, int $id)

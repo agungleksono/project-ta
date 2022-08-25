@@ -135,7 +135,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-			<button type="button" class="btn btn-primary" onclick="addData()" data-bs-dismiss="modal">Simpan</button>
+			<button type="button" class="btn btn-primary" onclick="performEditData()" data-bs-dismiss="modal">Simpan</button>
 		</div>
 		</form>
 		</div>
@@ -159,6 +159,7 @@
 		const tableContainer = document.querySelector('.table-container');
 		let rowTable = '';
 		let number = 0;
+		let trainingId = '';
 		const currentDate = new Date();
 
 		trainings.forEach(training => {
@@ -327,49 +328,90 @@
 	async function showEditData(id) {
 		const training = await getDetailData(`{{ url('/api/v1/admin/training/${id}') }}`, token);
 		const editContainer = document.querySelector('.edit-container');
+		trainingId = id;
 
 		editContainer.innerHTML = `
 			<div class="col-md-7">
 				<label class="form-label" for="training_name">Nama Pelatihan</label>
-				<input type="text" value="${training.training_name}" class="form-control" name="training_name" id="training_name" placeholder="Nama Pelatihan" required>
+				<input type="text" value="${training.training_name}" class="form-control" name="training_name" id="training_name_edit" placeholder="Nama Pelatihan" required>
 			</div>
 			<div class="col-md-5">
 				<label class="form-label" for="trainer_id">Trainer</label>
-				<select id="trainer_id" name="trainer_id" class="form-select trainer-select">
+				<select id="trainer_id_edit" name="trainer_id" class="form-select trainer-select">
 					<option value="${training.trainer.id}" selected>${training.trainer.name}</option>
 				</select>
 			</div>
 			<div class="col-12">
 				<label class="form-label" for="training_desc">Deskripsi</label>
-				<textarea class="form-control" name="training_desc" id="training_desc" placeholder="Deskripsi">${training.training_desc}</textarea>
+				<textarea class="form-control" name="training_desc" id="training_desc_edit" placeholder="Deskripsi">${training.training_desc}</textarea>
 			</div>
 			<div class="col-md-4">
 				<label class="form-label" for="training_price">Harga</label>
-				<input type="number" value="${training.training_price}" class="form-control" name="training_price" id="training_price" placeholder="Harga">
+				<input type="number" value="${training.training_price}" class="form-control" name="training_price" id="training_price_edit" placeholder="Harga">
 			</div>
 			<div class="col-md-8">
 				<label class="form-label" for="training_start">Tanggal Pelatihan</label>
 				<div class="row">
 					<div class="col">
-						<input type="date" value="${training.training_start}" class="form-control" name="training_start" id="training_start">
+						<input type="date" value="${training.training_start}" class="form-control" name="training_start" id="training_start_edit">
 					</div>
 					<div class="col-md-auto text-center mt-1">
 						<b>-</b>
 					</div>
 					<div class="col">
-						<input type="date" value="${training.training_end}" class="form-control" name="training_end" id="training_end">
+						<input type="date" value="${training.training_end}" class="form-control" name="training_end" id="training_end_edit">
 					</div>
 				</div>
 			</div>
 			<div class="col-12">
 				<label class="form-label" for="whatsapp_group">Link Grup Whatsapp</label>
-				<input type="text" value="${training.whatsapp_group}" class="form-control" name="whatsapp_group" id="whatsapp_group" placeholder="Link Grup Whatsapp">
+				<input type="text" value="${training.whatsapp_group}" class="form-control" name="whatsapp_group" id="whatsapp_group_edit" placeholder="Link Grup Whatsapp">
 			</div>
 			<div class="col-12">
 				<label class="form-label" for="training_img">Pilih Pamflet</label>
 				<img src="${training.training_img ? training.training_img : ''}" class="img-fluid col-md-3 mb-2 d-block">
-				<input type="file" class="form-control" name="training_img" id="training_img">
+				<input type="file" class="form-control" name="training_img" id="training_img_edit">
 			</div>
 		`
+	}
+
+	function performEditData() {
+		const formData = new FormData();
+
+		formData.append('training_name', document.getElementById('training_name_edit').value);
+		formData.append('training_desc', document.getElementById('training_desc_edit').value);
+		formData.append('training_price', document.getElementById('training_price_edit').value);
+		formData.append('training_start', document.getElementById('training_start_edit').value);
+		formData.append('training_end', document.getElementById('training_end_edit').value);
+		formData.append('whatsapp_group', document.getElementById('whatsapp_group_edit').value);
+		formData.append('trainer_id', document.getElementById('trainer_id_edit').value);
+		formData.append('training_img', document.getElementById('training_img_edit').files[0]);
+
+		fetch(`{{ url('/api/v1/training/${trainingId}') }}`, {
+			method: 'POST',
+			body: formData,
+			headers: {
+				'Authorization' : `Bearer ${token}`,
+			}
+		})
+		.then(response => response.json())
+			.then(json => {
+				console.log(json);
+				if (json.meta.status == 'error') {
+					return swal({
+						title: "Gagal",
+						text: `${json.meta.message}`,
+						icon: "error",
+					});
+				}
+				swal({
+					title: "Sukses",
+					text: "Berhasil menambahkan data.",
+					icon: "success",
+					buttons: true,
+				})
+				.then((value) => window.location.href = `{{ url('/admin/pelatihan') }}`);
+			})
+			.catch(err => console.log(err))
 	}
 </script>
