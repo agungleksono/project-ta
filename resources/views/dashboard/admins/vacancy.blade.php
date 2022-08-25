@@ -211,7 +211,7 @@
 				text: "You clicked the button!",
 				icon: "success",
 			});
-			showData();
+			window.location.href = `{{ url('/admin/lowongan-kerja') }}`
 		})
 		.catch(err => console.log(err))
 	}
