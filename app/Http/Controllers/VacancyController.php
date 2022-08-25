@@ -17,6 +17,18 @@ class VacancyController extends Controller
     public function index()
     {
         // $vacancies = Vacancy::all()->orderBy('created_at', 'DESC');
+        $currentDate = now()->format('Y-m-d');
+        $vacancies = DB::table('vacancies')->where('deadline', '>=', $currentDate)->orderByDesc('created_at')->get();
+        if(count($vacancies) > 0) {
+            return ResponseFormatter::success($vacancies, 'Success');
+        }
+
+        return ResponseFormatter::success(null, 'Data empty');
+    }
+
+    public function indexAdmin()
+    {
+        // $vacancies = Vacancy::all()->orderBy('created_at', 'DESC');
         $vacancies = DB::table('vacancies')->orderByDesc('created_at')->get();
         if(count($vacancies) > 0) {
             return ResponseFormatter::success($vacancies, 'Success');

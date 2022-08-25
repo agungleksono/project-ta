@@ -71,6 +71,7 @@ Route::prefix('v1')->group(function() {
 
         // Vacancy
         Route::get('/vacancies', [VacancyController::class, 'index']);
+        Route::get('/vacancies_admin', [VacancyController::class, 'indexAdmin']);
         Route::get('/vacancy/{id}', [VacancyController::class, 'show']);
         Route::post('/vacancy', [VacancyController::class, 'store']);
         Route::put('/vacancy/{id}', [VacancyController::class, 'update']);

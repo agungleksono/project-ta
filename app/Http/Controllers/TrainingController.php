@@ -22,7 +22,8 @@ class TrainingController extends Controller
 {
     public function index()
     {
-        $trainings = Training::all();
+        // $trainings = Training::all();
+        $trainings = Training::where('training_end', '>=', now()->format('Y-m-d'))->orderBy('created_at', 'DESC')->get();
         if(count($trainings) == 0) {
             return ResponseFormatter::error(null, 'Data not found', 400);
         }

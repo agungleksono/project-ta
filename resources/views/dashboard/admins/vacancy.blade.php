@@ -125,7 +125,7 @@
 	showData();
 
 	async function showData() {
-		const vacancies = await getData(`{{ url('/api/v1/vacancies') }}`, token);
+		const vacancies = await getData(`{{ url('/api/v1/vacancies_admin') }}`, token);
 		console.log(vacancies);
 		const tableContainer = document.querySelector('.table-container');
 		let rowTable = '';
