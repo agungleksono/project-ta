@@ -62,7 +62,7 @@ class TrainingRecordController extends Controller
                 
         $responseData = [
             'id' => $trainingRecord->id,
-            'training_img' => $trainingRecord->training->training_img,
+            'training_img' => $trainingRecord->training->training_img ? url('storage/' . $trainingRecord->training->training_img) : null,
             'training_name' => $trainingRecord->training->training_name,
             'training_desc' => $trainingRecord->training->training_desc,
             'training_start' => $trainingRecord->training->training_start,
