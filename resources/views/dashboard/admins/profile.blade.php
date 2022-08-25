@@ -14,23 +14,42 @@
 			<div class="col-md-6 profile-container">
 				
 			</div>
+			<div class="mt-2">
+				<a class="btn btn-outline-success btn-sm btn-upload" href="#" onclick="getDataProfile()" role="button" data-bs-toggle="modal" data-bs-target="#editProfileModal"><i class="bi bi-upload"></i><span class="d-none d-lg-inline ms-1">Ubah Data Profil</span></a>
+			</div>
     	</div>
 	</div>
 </div>
 @endsection
 
 <!-- Awal Modal Detail -->
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
 		<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title" id="detailModalLabel">Detail Pelatihan</h5>
+			<h5 class="modal-title" id="editProfileModalLabel">Ubah Data Profil</h5>
 			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		</div>
-		<div class="modal-body px-3 detail-container">
-			
+		<div class="modal-body px-3 edit-container">
+				<!-- <div class="col mb-3">
+					<label class="form-label" for="name">Nama</label>
+					<input type="text" class="form-control" name="name" id="name" placeholder="Nama" required>
+				</div>
+				<div class="col mb-3">
+					<label class="form-label" for="username">Username</label>
+					<input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
+				</div>
+				<div class="col mb-3">
+					<label class="form-label" for="address">Alamat</label>
+					<input type="text" class="form-control" name="address" id="address" placeholder="Alamat" required>
+				</div>
+				<div class="col">
+					<label class="form-label" for="phone">No. HP</label>
+					<input type="text" class="form-control" name="phone" id="phone" placeholder="No. HP" required>
+				</div> -->
 		</div>
 		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" onclick="editProfile()">Simpan</button>
 			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 		</div>
 		</div>
@@ -83,5 +102,63 @@
 				</div>
 			</div>
 		`
+	}
+
+	async function getDataProfile() {
+		const admin = await getData(`{{ url('/api/v1/admin/profile') }}`, token);
+		const editContainer = document.querySelector('.edit-container');
+
+		editContainer.innerHTML = `
+				<div class="col mb-3">
+					<label class="form-label" for="name">Nama</label>
+					<input type="text" class="form-control" value="${admin.administrator.name}" name="name" id="name" placeholder="Nama" required>
+				</div>
+				<div class="col mb-3">
+					<label class="form-label" for="username">Username</label>
+					<input type="text" class="form-control" value="${admin.username}" name="username" id="username" placeholder="Username" required>
+				</div>
+				<div class="col mb-3">
+					<label class="form-label" for="address">Alamat</label>
+					<input type="text" class="form-control" value="${admin.administrator.address}" name="address" id="address" placeholder="Alamat" required>
+				</div>
+				<div class="col">
+					<label class="form-label" for="phone">No. HP</label>
+					<input type="text" class="form-control" value="${admin.administrator.phone}" name="phone" id="phone" placeholder="No. HP" required>
+				</div>
+		`
+	}
+
+	function editProfile() {
+		const formData = new FormData();
+
+		formData.append('name', document.getElementById('name').value);
+		formData.append('username', document.getElementById('username').value);
+		formData.append('address', document.getElementById('address').value);
+		formData.append('phone', document.getElementById('phone').value);
+
+		fetch(`{{ url('/api/v1/admin/profile') }}`, {
+			method: 'POST',
+			body: formData,
+			headers: {
+				'Authorization' : `Bearer ${token}`,
+			}
+		})
+		.then(response => response.json())
+		.then(json => {
+			if (json.meta.status == 'error') {
+					return swal({
+						title: "Gagal",
+						text: `${json.meta.message}`,
+						icon: "error",
+					});
+				}
+				swal({
+					title: "Sukses",
+					text: "Profil berhasil diubah.",
+					icon: "success",
+					buttons: true,
+				})
+				.then((value) => window.location.href = `{{ url('/admin/profile') }}`);
+		})
 	}
 </script>
