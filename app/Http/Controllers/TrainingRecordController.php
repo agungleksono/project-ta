@@ -109,7 +109,7 @@ class TrainingRecordController extends Controller
             $responseData += ['requirement_status' => 'Lengkap'];
         }
 
-        return $responseData;
+        return ResponseFormatter::success($responseData, 'success');
     }
 
     public function uploadTrainingRequirements(Request $request)
