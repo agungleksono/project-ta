@@ -5,19 +5,19 @@
         <span>Trainer</span>
       </h6>
       <li class="nav-item">
-        <a class="nav-link mx-2 rounded {{ Request::is('admin/dashboard') ? 'active' : '' }}" aria-current="page" href="{{ route('admin_dashboard') }}">
+        <a class="nav-link mx-2 rounded {{ Request::is('trainer/dashboard') ? 'active' : '' }}" aria-current="page" href="{{ route('trainer_dashboard') }}">
           <span class="align-text-center me-1"><i class="bi bi-house-door"></i></span>
           Dashboard        
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link mx-2 rounded {{ Request::is('admin/pelatihan') ? 'active' : '' }}" href="{{ route('trainings') }}">
+        <a class="nav-link mx-2 rounded {{ Request::is('trainer/pelatihan') ? 'active' : '' }}" href="{{ route('trainer_training') }}">
           <span class="align-text-center me-1"><i class="bi bi-file-earmark-text" style="font-size: 1rem;"></i></span>
           Daftar Pelatihan
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link mx-2 rounded {{ Request::is('admin/profile') ? 'active' : '' }}" href="{{ route('admin_profile') }}">
+        <a class="nav-link mx-2 rounded {{ Request::is('trainer/profile') ? 'active' : '' }}" href="{{ route('trainer_profile') }}">
         <span class="align-text-center me-1"><i class="bi bi-gear" style="font-size: 1rem;"></i></span>
           Pengaturan Akun
         </a>
