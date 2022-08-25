@@ -173,7 +173,7 @@
 					
 					<td class="td-last"><a class="btn btn-outline-primary btn-sm btn-detail" href="#" onclick="showDetailData(${training.id})" role="button" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="bi bi-info-square"></i><span class="d-none d-lg-inline ms-1">Detail</span></a></td>
 					<td class="td-last"><a class="btn btn-outline-success btn-sm" href="#" onclick="showEditData(${training.id})" role="button" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i><span class="d-none d-lg-inline ms-1">Ubah</span></a></td>
-					<td class="td-last"><a class="btn btn-outline-danger btn-sm" href="#" onclick="deleteConfirmation(${training.id}, '${training.name}')" role="button"><i class="bi bi-trash"></i><span class="d-none d-lg-inline ms-1">Hapus</span></a></td>
+					<td class="td-last"><a class="btn btn-outline-danger btn-sm" href="#" onclick="deleteConfirmation(${training.id}, '${training.training_name}')" role="button"><i class="bi bi-trash"></i><span class="d-none d-lg-inline ms-1">Hapus</span></a></td>
 					
 				</tr>
 			`
@@ -413,5 +413,30 @@
 				.then((value) => window.location.href = `{{ url('/admin/pelatihan') }}`);
 			})
 			.catch(err => console.log(err))
+	}
+
+	function deleteConfirmation(id, name) {
+		swal({
+			title: `Apakah anda yakin ingin menghapus data ${name}?`,
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+			})
+			.then((willDelete) => {
+			if (willDelete) {
+				try {
+					deleteData(`{{ url('/api/v1/training/${id}') }}`, token);
+					swal("Data berhasil dihapus", {
+						icon: "success",
+					});
+					showData()
+				} catch (error) {
+					
+					swal("Data gagal dihapus", {
+						icon: "error",
+					});
+				}
+			}
+		});
 	}
 </script>

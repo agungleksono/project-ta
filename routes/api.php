@@ -91,6 +91,7 @@ Route::prefix('v1')->group(function() {
 
         // Dashboard
         Route::get('/admin/dashboard', [DashboardController::class, 'statistic']);
+        Route::get('/dashboard_trainer', [DashboardController::class, 'trainerStatistic']);
     });
     Route::post('/logintest', [AuthController::class, 'loginTest']);
     Route::get('/test', [AuthController::class, 'test']);
