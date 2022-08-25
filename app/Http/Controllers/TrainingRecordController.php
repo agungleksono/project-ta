@@ -52,6 +52,9 @@ class TrainingRecordController extends Controller
     public function showCustomerTrainingRecord($id) {
         // $training = TrainingRecord::find($id);
         $trainingRecord = TrainingRecord::with(['training', 'customer'])->find($id);
+        if (!$trainingRecord) {
+            return ResponseFormatter::error(null, 'Data not found', 400);
+        }
         // return $trainingRecord->training->trainer['cv'];
         // $customerDocuments = CustomerDocument::find($trainingRecord->customer->id, 'customer_id')->first();
         $customerDocuments = CustomerDocument::where('customer_id', $trainingRecord->customer->id)->first();
