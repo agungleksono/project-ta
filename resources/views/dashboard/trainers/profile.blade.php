@@ -16,10 +16,10 @@
 					<img src="..." class="rounded-circle" alt="...">
 				</div>
 				<div class="row d-grid gap-2 col-7 mx-auto mb-2">
-					<a class="btn btn-warning btn-sm text-light fw-semibold btn-upload" href="#" onclick="" role="button" data-bs-toggle="modal" data-bs-target="#editImageModal"><span class="d-none d-lg-inline ms-1">Ubah Foto</span></a>
+					<a class="btn btn-info btn-sm text-light fw-semibold btn-upload" href="#" onclick="" role="button" data-bs-toggle="modal" data-bs-target="#editImageModal"><span class="d-none d-lg-inline ms-1">Ubah Foto</span></a>
 				</div>
 				<div class="row d-grid gap-2 col-7 mx-auto">
-					<a class="btn btn-warning btn-sm text-light fw-semibold btn-upload" href="#" onclick="" role="button" data-bs-toggle="modal" data-bs-target="#editCvModal"><span class="d-none d-lg-inline ms-1">Upload CV</span></a>
+					<a class="btn btn-info btn-sm text-light fw-semibold btn-upload" href="#" onclick="" role="button" data-bs-toggle="modal" data-bs-target="#editCvModal"><span class="d-none d-lg-inline ms-1">Upload CV</span></a>
 				</div>
 			</div>
 			<div class="col-md-6 p-4 rounded" id="card">
@@ -56,7 +56,7 @@
 					</div> -->
 				</div>
 				<div class="mt-2 d-flex justify-content-center">
-					<a class="btn btn-success btn-sm text-light fw-semibold btn-upload" href="#" onclick="getDataProfile()" role="button" data-bs-toggle="modal" data-bs-target="#editProfileModal"></i><span class="d-none d-lg-inline ms-1">Ubah Data Profil</span></a>
+					<a class="btn btn-info btn-sm text-light fw-semibold btn-upload" href="#" onclick="getDataProfile()" role="button" data-bs-toggle="modal" data-bs-target="#editProfileModal"></i><span class="d-none d-lg-inline ms-1">Ubah Data Profil</span></a>
 				</div>
 			</div>
 		</div>
