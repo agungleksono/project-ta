@@ -68,7 +68,11 @@
 					console.log(response);
 					if (response.meta.status == 'success') {
 						document.cookie = `token=${response.data.api_token}`;
-						window.location.href = "{{ url('/admin/dashboard') }}";
+						if (response.data.user_role == '1') {
+							window.location.href = "{{ url('/admin/dashboard') }}";
+						} else if (response.data.user_role == '3') {
+							window.location.href = "{{ url('/trainer/dashboard') }}";
+						}
 					}
 				})
 			}
