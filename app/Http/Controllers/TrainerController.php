@@ -7,8 +7,10 @@ use App\Helpers\ResponseFormatter;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class TrainerController extends Controller
 {
@@ -27,6 +29,118 @@ class TrainerController extends Controller
             }
             return ResponseFormatter::success($trainers, 'success');            
         } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
+    }
+
+    public function getTrainerProfile()
+    {
+        $user = User::find(Auth::id());
+        if (!$user) return ResponseFormatter::error(null, 'User not found', 400);
+
+        $userData = User::with(['trainer'])
+                            ->where('id', '=', Auth::id())
+                            ->first();
+        
+        // if ($userData->isEmpty()) return ResponseFormatter::error(null, 'User not found', 400);
+
+        $responseData = [
+            'id' => $userData->id,
+            'username' => $userData->username,
+            'email' => $userData->email,
+            'name' => $userData->trainer['name'],
+            'address' => $userData->trainer['address'],
+            'phone' => $userData->trainer['phone'],
+            'photo' => $userData->trainer['photo'] ? url('storage/' . $userData->trainer['photo']) : null,
+        ];
+
+        return ResponseFormatter::success($responseData, 'Success');
+    }
+
+    public function editAdminProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'username' => 'required|string',
+            'address' => 'required|string',
+            'phone' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseFormatter::error(null, $validator->errors()->first(), 400);
+        }
+
+        try {
+            DB::transaction(function() use($request) {
+                DB::table('users')
+                    ->where('id', Auth::id())
+                    ->update(['username' => $request->username]);
+            
+                DB::table('trainers')
+                ->where('user_id', Auth::id())
+                ->update([
+                    'name' => $request->name,
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                ]);
+            });
+            
+            return ResponseFormatter::success(null, 'success');
+        } catch (\Throwable $th) {
+            return ResponseFormatter::error(null, $th, 400);
+        }
+    }
+
+    public function editProfileImage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|image',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseFormatter::error(null, $validator->errors()->first(), 400);
+        }
+
+        $photo = $request->file('photo')->store('public/uploads/avatar/trainer');
+        $path = asset('storage/' . $photo);
+
+        try {
+            DB::table('trainers')
+                ->where('user_id', Auth::id())
+                ->update([
+                    'photo' => Str::remove('public/', $photo),
+                ]);
+            
+            return ResponseFormatter::success(null, 'success');
+        } catch (\Throwable $th) {
+            Helper::deleteFileOnStorage($path);
+            return ResponseFormatter::error(null, $th, 400);
+        }
+    }
+
+    public function editCv(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'cv' => 'required|file',
+        ]);
+
+        if ($validator->fails()) {
+            return ResponseFormatter::error(null, $validator->errors()->first(), 400);
+        }
+
+        $cv = $request->file('cv')->store('public/uploads/trainer/cv');
+        $path = asset('storage/' . $cv);
+
+        try {
+            DB::table('trainers')
+                ->where('user_id', Auth::id())
+                ->update([
+                    'cv' => Str::remove('public/', $cv),
+                ]);
+            
+            return ResponseFormatter::success(null, 'success');
+        } catch (\Throwable $th) {
+            Helper::deleteFileOnStorage($path);
             return ResponseFormatter::error(null, $th, 400);
         }
     }

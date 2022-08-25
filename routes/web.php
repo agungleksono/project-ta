@@ -68,4 +68,7 @@ Route::middleware('token')->group(function() {
     Route::get('/trainer/pelatihan', function() {
         return view('dashboard.trainers.training');
     })->name('trainer_training');
+    Route::get('/trainer/profile', function() {
+        return view('dashboard.trainers.profile');
+    })->name('trainer_profile');
 });

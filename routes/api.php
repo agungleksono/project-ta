@@ -40,6 +40,10 @@ Route::prefix('v1')->group(function() {
         Route::post('/profile/avatar/edit', [CustomerController::class, 'updateProfilePicture']);
         Route::get('/admin/profile', [AdminController::class, 'getAdminProfile']);
         Route::post('/admin/profile', [AdminController::class, 'editAdminProfile']);
+        Route::get('/trainer/profile', [TrainerController::class, 'getTrainerProfile']);
+        Route::post('/trainer/profile', [TrainerController::class, 'editAdminProfile']);
+        Route::post('/trainer/profile/image', [TrainerController::class, 'editProfileImage']);
+        Route::post('/trainer/profile/cv', [TrainerController::class, 'editCv']);
 
         // Trainings route
         Route::get('/trainings', [TrainingController::class, 'index']);
