@@ -27,6 +27,7 @@ class TrainingRecordController extends Controller
         $customer = Customer::where('user_id', Auth::id())->first();
         // $trainings = TrainingRecord::where('customer_id', $customer->id)->get();
         $trainings = TrainingRecord::with(['training'])->where('customer_id', '=', $customer->id)->get();
+        // return $trainings;
         if ($trainings->isEmpty()) {
             // return ResponseFormatter::error(null, 'You have not register any training', 200);
             return ResponseFormatter::success(null, 'You have not register any training');
@@ -35,7 +36,7 @@ class TrainingRecordController extends Controller
         $data = [];
         foreach ($trainings as $training) {
             $responseData = [
-                'id' => $training->training->id,
+                'id' => $training->id,
                 'training_name' => $training->training->training_name,
             ];
 
