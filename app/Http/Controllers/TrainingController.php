@@ -22,11 +22,11 @@ class TrainingController extends Controller
 {
     public function index()
     {
-        $trainings = Training::all();
-        // return $currentDate = now()->format('Y-m-d');
-        $currentDate = date('Y-m-d', strtotime('+1 day', time()));
+        // $trainings = Training::all();
+        $currentDate = now()->format('Y-m-d');
+        // $currentDate = date('Y-m-d', strtotime('+1 day', time()));
         // $trainings = Training::where('training_end', '>=', $currentDate)->where('training_start', '>=', $currentDate)->orderBy('created_at', 'DESC')->get();
-        // $trainings = DB::table('trainings')->where('training_start', '>', $currentDate)->where('training_end', '>', $currentDate)->orderBy('created_at', 'DESC')->get();
+        $trainings = DB::table('trainings')->where('training_start', '>', $currentDate)->where('training_end', '>', $currentDate)->orderBy('created_at', 'DESC')->get();
         if(count($trainings) == 0) {
             return ResponseFormatter::error(null, 'Data not found', 400);
         }
