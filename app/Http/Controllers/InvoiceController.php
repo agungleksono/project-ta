@@ -17,6 +17,7 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $data = Invoice::with(['customer', 'training'])->where('id', $id)->first();
+        $data->invoice_proof = url('storage/' . $data->invoice_proof);
         return ResponseFormatter::success($data, 'success');
     }
 

@@ -52,6 +52,7 @@ Route::prefix('v1')->group(function() {
         Route::get('/training/{id}', [TrainingController::class, 'show']);
         Route::post('/training', [TrainingController::class, 'store']);
         Route::post('/training/register', [TrainingController::class, 'registerTraining']);
+        Route::post('/training/requirements', [TrainingRecordController::class, 'uploadTrainingRequirements']);
         Route::post('/training/{id}', [TrainingController::class, 'updateTraining']);
         Route::delete('/training/{id}', [TrainingController::class, 'destroy']);
         // Route::post('/training/register_test', [TrainingController::class, 'registerTraining']);
@@ -81,7 +82,6 @@ Route::prefix('v1')->group(function() {
         
         Route::get('/followup_trainings', [TrainingRecordController::class, 'getCustomerTrainingRecords']);
         Route::get('/followup_training/{id}', [TrainingRecordController::class, 'showCustomerTrainingRecord']);
-        Route::post('/training/requirements', [TrainingRecordController::class, 'uploadTrainingRequirements']);
         
         Route::get('/training_record/customers/{id}', [TrainingRecordController::class, 'getTrainingCustomers']);
         Route::post('/training_record/competence_certificate/{id}', [TrainingRecordController::class, 'uploadCompetenceCertificate']);
