@@ -48,12 +48,14 @@ Route::prefix('v1')->group(function() {
         Route::post('/trainer/upload_material/{id}', [TrainerController::class, 'uploadMaterial']);
 
         // Trainings route
+        Route::post('/training/register', [TrainingController::class, 'registerTraining']);
         Route::get('/trainings', [TrainingController::class, 'index']);
         Route::get('/training/{id}', [TrainingController::class, 'show']);
         Route::post('/training', [TrainingController::class, 'store']);
         Route::post('/training/{id}', [TrainingController::class, 'updateTraining']);
         Route::delete('/training/{id}', [TrainingController::class, 'destroy']);
-        Route::post('/training/register', [TrainingController::class, 'registerTraining']);
+        // Route::post('/training/register_test', [TrainingController::class, 'registerTraining']);
+        // Route::post('/register_training', [TrainingController::class, 'trainingRegister']);
         Route::get('/admin/trainings', [TrainingController::class, 'getTrainings']);
         Route::get('/admin/training/{id}', [TrainingController::class, 'getDetailTraining']);
         Route::get('/admin/training_records', [TrainingController::class, 'getTrainingRecords']);

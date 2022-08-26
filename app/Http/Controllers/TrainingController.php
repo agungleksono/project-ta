@@ -290,8 +290,52 @@ class TrainingController extends Controller
         } catch (\Throwable $th) {
             return ResponseFormatter::error(null, $th, 400);
         }
-
-
-
     }
+    // public function trainingRegister(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'training_id' => 'required',
+    //         'invoice_proof' => 'required'
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return ResponseFormatter::error(null, $validator->errors()->first(), 400);
+    //     }
+
+    //     try {
+    //         $customer = Customer::where('user_id', Auth::id())->get();
+    //         $customer_id = $customer[0]->id;
+    //         $date = now()->format('Ymd');
+    //         $invoice_number = $date . Str::upper(Str::random(8));    
+    //         $training = Training::findOrFail($request->training_id);
+    //         $invoice_total = $training->training_price;
+    //         $invoice_proof = $request->file('invoice_proof')->store('invoice', ['disk' => 'public']);
+    //         $path = asset('uploads/' . $invoice_proof);
+
+    //         DB::transaction(function () use ($request, $invoice_number, $customer_id, $invoice_total, $path) {
+    //             TrainingRecord::create([
+    //                 // 'scheme' => $request->post('scheme'),
+    //                 // 'trainer_id' => $request->post('trainer_id'),
+    //                 'customer_id' => $customer_id,
+    //                 'training_id' => $request->post('training_id'),
+    //             ]);
+                
+        
+    //             Invoice::create([
+    //                 'invoice_number' => $invoice_number,
+    //                 'invoice_total' => $invoice_total,
+    //                 'invoice_proof' => $path,
+    //                 'invoice_status' => 0,
+    //                 // 'invoice_payment_method'
+    //                 // 'invoice_payment_deadline' => now()->addDay(),
+    //                 'invoice_payment_date' => now(),
+    //                 'training_id' => $request->post('training_id'),
+    //                 'customer_id' => $customer_id,
+    //             ]);
+    //         });
+    //         return ResponseFormatter::success(null, 'Upload success');            
+    //     } catch (\Throwable $th) {
+    //         return ResponseFormatter::error(null, $th, 400);
+    //     }
+    // }
 }
