@@ -262,10 +262,10 @@ class TrainingController extends Controller
             $invoice_number = $date . Str::upper(Str::random(8));    
             $training = Training::findOrFail($request->training_id);
             $invoice_total = $training->training_price;
-            $invoice_proof = $request->file('invoice_proof')->store('invoice', ['disk' => 'public']);
+            $invoice_proof = $request->file('invoice_proof')->store('public/uploads/invoice');
             $path = asset('uploads/' . $invoice_proof);
 
-            DB::transaction(function () use ($request, $invoice_number, $customer_id, $invoice_total, $path) {
+            DB::transaction(function () use ($request, $invoice_number, $customer_id, $invoice_total, $invoice_proof) {
                 TrainingRecord::create([
                     // 'scheme' => $request->post('scheme'),
                     // 'trainer_id' => $request->post('trainer_id'),
@@ -277,7 +277,7 @@ class TrainingController extends Controller
                 Invoice::create([
                     'invoice_number' => $invoice_number,
                     'invoice_total' => $invoice_total,
-                    'invoice_proof' => $path,
+                    'invoice_proof' => Str::remove('public/', $invoice_proof),
                     'invoice_status' => 0,
                     // 'invoice_payment_method'
                     // 'invoice_payment_deadline' => now()->addDay(),
