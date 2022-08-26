@@ -130,9 +130,9 @@ class TrainingController extends Controller
         $customer_id = Customer::where('user_id', Auth::id())->first()->id;
         $isRegistered = TrainingRecord::where('training_id', $id)->where('customer_id', $customer_id)->first();
         if (empty($isRegistered)) {
-            $training->status = true;
+            $training->training_status = true;
         } else {
-            $training->status = false;
+            $training->training_status = false;
         }
         
         if ($training->training_img) {
